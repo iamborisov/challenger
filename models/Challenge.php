@@ -177,6 +177,10 @@ class Challenge extends \yii\db\ActiveRecord
         return $this->hasOne(ChallengeSettings::className(), ['challenge_id' => 'id'])->inverseOf('challenge');
     }
 
+    /**
+     * Get question generation mode
+     * @return string
+     */
     public function getMode() {
         $questions = $this->getChallengeHasQuestions()->count();
         $rules = $this->getChallengeGenerations()->count();
@@ -192,6 +196,10 @@ class Challenge extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * Get modes list
+     * @return array
+     */
     public function getModes() {
         return [
             self::MODE_STATIC => 'Вручную, я сам выберу необходимые задания',
@@ -200,6 +208,11 @@ class Challenge extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Set question generation mode
+     * @param $mode
+     * @param array $data
+     */
     public function setMode( $mode, $data = null ) {
         ChallengeGeneration::deleteAll(['challenge_id' => $this->id]);
         ChallengeHasQuestion::deleteAll(['challenge_id' => $this->id]);
@@ -234,6 +247,10 @@ class Challenge extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * Get questions count in this challenge
+     * @return int
+     */
     public function getQuestionsCount() {
         switch ( $this->getMode() ) {
             case self::MODE_STATIC:

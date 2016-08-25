@@ -2,33 +2,60 @@
 
 namespace app\helpers;
 
-use \app\models\Challenge;
+use app\models\Challenge;
 use app\models\Question;
 
-class ChallengeSession {
+/**
+ * Challenge Session Manager
+ * @package app\helpers
+ */
+class ChallengeSession
+{
 
+    /**
+     * @var Challenge
+     */
     protected $challenge;
 
+    /**
+     * User ID
+     * @var int
+     */
     protected $user;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Public
 //----------------------------------------------------------------------------------------------------------------------
 
-    public function __construct( Challenge $challenge, $user )
+    /**
+     * ChallengeSession constructor.
+     * @param Challenge $challenge
+     * @param $user
+     */
+    public function __construct(Challenge $challenge, $user)
     {
         $this->challenge = $challenge;
         $this->user = $user;
     }
 
-    public function canStart() {
+    /**
+     * Can user start this challenge?
+     * @return bool
+     */
+    public function canStart()
+    {
         return true;
     }
 
-    public function start() {
-        if ( $this->canStart() ) {
+    /**
+     * Start challenge
+     * @return bool
+     */
+    public function start()
+    {
+        if ($this->canStart()) {
             $this->openQueue();
-            $this->setCurrentQuestionNumber( 0 );
+            $this->setCurrentQuestionNumber(0);
 
             return true;
         }
@@ -36,96 +63,165 @@ class ChallengeSession {
         return false;
     }
 
-    public function finish() {
+    /**
+     * Finish challenge
+     * Calling when the last answer submitted
+     */
+    public function finish()
+    {
         $this->saveAnswers();
         $this->closeQueue();
     }
 
-    public function answer( $answer ) {
-        if ( !$this->isFinished() ) {
-            $this->storeAnswer( $answer );
-            $this->setCurrentQuestionNumber( $this->getCurrentQuestionNumber() + 1 );
+    /**
+     * Submit answer and switch to next question.
+     * If no questions left - finish challenge
+     * @param $answer string
+     */
+    public function answer($answer)
+    {
+        if (!$this->isFinished()) {
+            $this->storeAnswer($answer);
+            $this->setCurrentQuestionNumber($this->getCurrentQuestionNumber() + 1);
         }
 
-        if ( $this->isFinished() ) {
+        if ($this->isFinished()) {
             $this->finish();
         }
     }
 
-    public function isFinished() {
-        return $this->getCurrentQuestionNumber() >= count( $this->getQueue() );
+    /**
+     * Is last question reached?
+     * @return bool
+     */
+    public function isFinished()
+    {
+        return $this->getCurrentQuestionNumber() >= count($this->getQueue());
     }
 
 //----------------------------------------------------------------------------------------------------------------------
 // Current question
 //----------------------------------------------------------------------------------------------------------------------
 
-    public function getCurrentQuestionNumber() {
-        return \Yii::$app->session->get( $this->getSessionKey( 'question' ), 0 );
+    /**
+     * @return int
+     */
+    public function getCurrentQuestionNumber()
+    {
+        return \Yii::$app->session->get($this->getSessionKey('question'), 0);
     }
 
-    public function getCurrentQuestion() {
+    /**
+     * @return Question
+     */
+    public function getCurrentQuestion()
+    {
         $queue = $this->getQueue();
         $question = $this->getCurrentQuestionNumber();
-        return Question::findOne( $queue[$question] );
+        return Question::findOne($queue[$question]);
     }
 
-    protected function setCurrentQuestionNumber( $value ) {
-        return \Yii::$app->session->set( $this->getSessionKey( 'question' ), $value );
+    /**
+     * @param $value int
+     */
+    protected function setCurrentQuestionNumber($value)
+    {
+        \Yii::$app->session->set($this->getSessionKey('question'), $value);
     }
 
 //----------------------------------------------------------------------------------------------------------------------
 // Answers
 //----------------------------------------------------------------------------------------------------------------------
 
-    protected function storeAnswer( $answer ) {
-        \Yii::$app->session->set( $this->getSessionKey( 'answer-' . $this->getCurrentQuestionNumber() ), $answer );
+    /**
+     * Temporary stores answer until challenge finished
+     * @param $answer string
+     */
+    protected function storeAnswer($answer)
+    {
+        \Yii::$app->session->set($this->getSessionKey('answer-' . $this->getCurrentQuestionNumber()), $answer);
     }
 
-    protected function saveAnswers() {
+    /**
+     * Clear temporary answers storage and combine answers into QuestionID => Answer array
+     */
+    protected function saveAnswers()
+    {
         $answers = [];
 
-        foreach ( $this->getQueue() as $i => $id ) {
-            $answers[$id] = \Yii::$app->session->get( $this->getSessionKey( 'answer-' . $i ), [] );
-            \Yii::$app->session->remove( $this->getSessionKey( 'answer-' . $i ) );
+        foreach ($this->getQueue() as $i => $id) {
+            $answers[$id] = \Yii::$app->session->get($this->getSessionKey('answer-' . $i), []);
+            \Yii::$app->session->remove($this->getSessionKey('answer-' . $i));
         }
 
-        \Yii::$app->session->set( $this->getSessionKey( 'answers' ), $answers );
+        \Yii::$app->session->set($this->getSessionKey('answers'), $answers);
     }
 
-    public function getAnswers() {
-        return \Yii::$app->session->get( $this->getSessionKey( 'answers' ), [] );
+    /**
+     * Get all answers (available after challenge finish)
+     * @return array
+     */
+    public function getAnswers()
+    {
+        return \Yii::$app->session->get($this->getSessionKey('answers'), []);
+    }
+
+    /**
+     * Get current question answer
+     * @return string
+     */
+    public function getAnswer()
+    {
+        return \Yii::$app->session->get($this->getSessionKey('answer-' . $this->getCurrentQuestionNumber()), '');
     }
 
 //----------------------------------------------------------------------------------------------------------------------
 // Questions queue
 //----------------------------------------------------------------------------------------------------------------------
 
-    protected function openQueue() {
-        \Yii::$app->session->set( $this->getSessionKey( 'queue' ), $this->generateQueue() );
+    /**
+     * Create questions queue
+     */
+    protected function openQueue()
+    {
+        \Yii::$app->session->set($this->getSessionKey('queue'), $this->generateQueue());
     }
 
-    protected function closeQueue() {
-        \Yii::$app->session->remove( $this->getSessionKey( 'queue' ) );
+    /**
+     * Clear questions queue
+     */
+    protected function closeQueue()
+    {
+        \Yii::$app->session->remove($this->getSessionKey('queue'));
     }
 
-    protected function getQueue() {
-        return \Yii::$app->session->get( $this->getSessionKey( 'queue' ) );
+    /**
+     * Get questions ids for current challenge
+     * @return int[]
+     */
+    protected function getQueue()
+    {
+        return \Yii::$app->session->get($this->getSessionKey('queue'));
     }
 
-    protected function generateQueue() {
+    /**
+     * Generate questions queue using challenge settings
+     * @return int[]
+     */
+    protected function generateQueue()
+    {
         $queue = [];
 
-        switch( $this->challenge->getMode() ) {
+        switch ($this->challenge->getMode()) {
             case Challenge::MODE_STATIC:
             case Challenge::MODE_DYNAMIC:
-                foreach ( $this->challenge->getQuestions()->all() as $question ) {
+                foreach ($this->challenge->getQuestions()->all() as $question) {
                     $queue[] = $question->id;
                 }
                 break;
 
             case Challenge::MODE_RANDOM:
-                $chooser = new QuestionChooser( $this->challenge );
+                $chooser = new QuestionChooser($this->challenge);
                 $queue = $chooser->generate();
                 break;
 
@@ -138,7 +234,13 @@ class ChallengeSession {
 // Helpers
 //----------------------------------------------------------------------------------------------------------------------
 
-    private function getSessionKey( $postfix = '' ) {
-        return implode('-', [ 'challenge', $this->challenge->id, $this->user, $postfix ]);
+    /**
+     * Generate session key
+     * @param string $postfix
+     * @return string
+     */
+    private function getSessionKey($postfix = '')
+    {
+        return implode('-', ['challenge', $this->challenge->id, $this->user, $postfix]);
     }
 }

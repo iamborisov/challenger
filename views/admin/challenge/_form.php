@@ -16,6 +16,8 @@ use app\widgets\QuestionsList;
 /* @var $this yii\web\View */
 /* @var $model app\models\Challenge */
 /* @var $form yii\widgets\ActiveForm */
+
+$modelSettings = $model->challengeSettings ? $model->challengeSettings : new \app\models\ChallengeSettings();
 ?>
 
 <div class="challenge-form">

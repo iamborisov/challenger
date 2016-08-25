@@ -2,151 +2,45 @@
 
 namespace app\controllers\admin;
 
+use app\components\BaseAdminCrudController;
 use app\helpers\Subset;
-use app\models\Subject;
-use Yii;
 use app\models\Course;
 use app\models\search\CourseSearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use app\models\Subject;
+use Yii;
 
 /**
  * CourseController implements the CRUD actions for Course model.
  */
-class CourseController extends Controller
+class CourseController extends BaseAdminCrudController
 {
-
-    public function beforeAction($action)
+    /**
+     * @inheritdoc
+     */
+    protected function getModelClass()
     {
-        if ( parent::beforeAction($action) ) {
-            if ( \Yii::$app->user->can('admin') ) {
-                return true;
-            } else {
-                throw new ForbiddenHttpException('Access denied');
-            }
-        }
-
-        return false;
+        return Course::className();
     }
 
     /**
      * @inheritdoc
      */
-    public function behaviors()
+    protected function getSearchModelClass()
     {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
+        return CourseSearch::className();
     }
 
     /**
-     * Lists all Course models.
-     * @return mixed
+     * @inheritdoc
      */
-    public function actionIndex()
+    protected function saveModel($model)
     {
-        $searchModel = new CourseSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        Subset::save(
+            Subject::className(),
+            Yii::$app->request->post(),
+            ['course_id' => $model->id]
+        );
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Course model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Course model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Course();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Subset::save(
-                Subject::className(),
-                Yii::$app->request->post(),
-                ['course_id' => $model->id]
-            );
-
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Updates an existing Course model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Subset::save(
-                Subject::className(),
-                Yii::$app->request->post(),
-                ['course_id' => $model->id]
-            );
-
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Deletes an existing Course model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Course model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Course the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Course::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
+        return true;
     }
 }

@@ -6,16 +6,6 @@ use yii\base\Exception;
 use yii\widgets\ActiveForm;
 use yii\widgets\InputWidget;
 
-//<?= $form->field($model, 'challengeGenerations')->widget(SubsetWidget::className(), [
-//    'form' => $form,
-//    'child' => ChallengeGeneration::className(),
-//    'fields' => [
-//        'id' => 'hiddenInput',
-//        'question_type_id' => ['dropDownList',[QuestionType::getList()]],
-//        'question_count' => 'textInput',
-//    ]
-//])
-
 /**
  * Subset Widget
  * Allows you to edit many-to-many related child models

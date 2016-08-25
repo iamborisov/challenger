@@ -25,13 +25,17 @@ $config = [
         'db' => $db,
     ],
     'params' => $params,
-    /*
-    'controllerMap' => [
-        'fixture' => [ // Fixture generation command line.
-            'class' => 'yii\faker\FixtureController',
+
+    'modules' => [
+        'user' => [
+            'class' => 'dektrium\user\Module',
+            'adminPermission' => 'admin'
         ],
-    ],
-    */
+        'rbac' => [
+            'class' => 'dektrium\rbac\Module',
+            'adminPermission' => 'admin'
+        ]
+    ]
 ];
 
 if (YII_ENV_DEV) {

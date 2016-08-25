@@ -19,7 +19,7 @@
 </div>
 
 <script>
-    $(function(){
+    $(function () {
         $('#<?= $id ?>').questionEditorSelectMultiple();
     });
 </script>

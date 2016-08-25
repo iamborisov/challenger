@@ -57,10 +57,10 @@ abstract class BaseAdminCrudController extends BaseAdminController
 
     /**
      * Called after successfull model saving
-     * @param $model
+     * @param ActiveRecord $model
      * @return bool
      */
-    protected  function saveModel($model) {
+    protected  function saveModel(ActiveRecord $model) {
         return true;
     }
 
@@ -94,7 +94,7 @@ abstract class BaseAdminCrudController extends BaseAdminController
     }
 
     /**
-     * Deletes an existing Course model.
+     * Deletes an existing model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -107,7 +107,7 @@ abstract class BaseAdminCrudController extends BaseAdminController
     }
 
     /**
-     * Creates a new Course model.
+     * Creates a new model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
@@ -127,7 +127,7 @@ abstract class BaseAdminCrudController extends BaseAdminController
     }
 
     /**
-     * Updates an existing Course model.
+     * Updates an existing model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed

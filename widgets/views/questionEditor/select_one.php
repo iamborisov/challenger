@@ -12,14 +12,14 @@
         </div>
     </div>
     <div class="template item-template item row">
-        <div class="col-md-1"><input type="radio" name="<?=$id?>" class="pull-right"></div>
+        <div class="col-md-1"><input type="radio" name="<?= $id ?>" class="pull-right"></div>
         <div class="col-md-10"><input type="text" class="form-control"></div>
         <div class="col-md-1"><a class="btn btn-danger btn-xs remove pull-left">Удалить</a></div>
     </div>
 </div>
 
 <script>
-    $(function(){
+    $(function () {
         $('#<?= $id ?>').questionEditorSelectOne();
     });
 </script>

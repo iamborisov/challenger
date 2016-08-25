@@ -8,7 +8,7 @@
 </div>
 
 <script>
-    $(function(){
+    $(function () {
         $('#<?= $id ?>').questionEditorDictation();
     });
 </script>

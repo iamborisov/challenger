@@ -3,7 +3,6 @@
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use app\models\QuestionType;
-use yii\helpers\Html;
 
 $id = $id ? $id : (uniqid('qs') . '-modal');
 

@@ -9,7 +9,7 @@
 </div>
 
 <script>
-    $(function(){
+    $(function () {
         $('#<?= $id ?>').questionEditorTextLong();
     });
 </script>

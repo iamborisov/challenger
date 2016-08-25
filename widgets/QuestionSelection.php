@@ -2,17 +2,24 @@
 
 namespace app\widgets;
 
-use yii;
-use yii\web\AssetManager;
-use yii\base\Widget;
 use app\models\search\QuestionSearch;
+use yii;
+use yii\base\Widget;
 
-class QuestionSelection extends Widget {
+/**
+ * Question Selection popup
+ * @package app\widgets
+ */
+class QuestionSelection extends Widget
+{
 
     public $id = false;
 
     public $pageSize = 10;
 
+    /**
+     * @inheritdoc
+     */
     public function run()
     {
         // questions
@@ -21,11 +28,11 @@ class QuestionSelection extends Widget {
         $dataProvider->pagination->pageSize = $this->pageSize;
 
         // render
-        echo $this->render( 'questionSelection/default', [
+        echo $this->render('questionSelection/default', [
             'id' => $this->id,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ] );
+        ]);
     }
 
 }

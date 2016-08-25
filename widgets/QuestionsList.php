@@ -5,24 +5,43 @@ namespace app\widgets;
 use yii;
 use yii\web\AssetManager;
 use yii\widgets\InputWidget;
-use app\models\search\QuestionSearch;
 
-class QuestionsList extends InputWidget {
+/**
+ * Questions List widget
+ * @package app\widgets
+ */
+class QuestionsList extends InputWidget
+{
 
+    /**
+     * @var AssetManager
+     */
     private $assetManager;
 
+    /**
+     * @var string
+     */
     public $id = false;
 
+    /**
+     * @var string Input name
+     */
     public $name = false;
 
+    /**
+     * @var string QuestionSelection widget selector
+     */
     public $modalSelector = '';
 
+    /**
+     * @inheritdoc
+     */
     public function run()
     {
         $questions = $this->model->{$this->attribute};
 
         $data = [];
-        foreach ( $questions as $item ) {
+        foreach ($questions as $item) {
             $data[$item->question->id] = $item->question->text;
         }
 
@@ -35,24 +54,34 @@ class QuestionsList extends InputWidget {
         );
 
         // render
-        echo $this->render( 'questionsList/default', [
+        echo $this->render('questionsList/default', [
             'id' => $this->id,
             'data' => $data,
             'name' => $this->name ? $this->name : \yii\helpers\Html::getInputName($this->model, $this->attribute),
             'modalSelector' => $this->modalSelector,
-        ] );
+        ]);
     }
 
-    public function getAssetsPath() {
+    /**
+     * @return string
+     */
+    public function getAssetsPath()
+    {
         return $this->getViewPath() . DIRECTORY_SEPARATOR . 'questionsList' . DIRECTORY_SEPARATOR;
     }
 
-    public function publishAsset( $src ) {
-        $path = Yii::getAlias( $this->getAssetsPath() . $src );
-        if ( ! $this->assetManager ) {
+    /**
+     * Publish widget asset
+     * @param $src Filename
+     * @return string URL
+     */
+    public function publishAsset($src)
+    {
+        $path = Yii::getAlias($this->getAssetsPath() . $src);
+        if (!$this->assetManager) {
             $this->assetManager = new AssetManager();
         }
-        $return = $this->assetManager->publish( $path );
+        $return = $this->assetManager->publish($path);
         return $return[1];
     }
 

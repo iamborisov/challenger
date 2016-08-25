@@ -1,4 +1,4 @@
-;( function( $, window, document, undefined ) {
+;(function ($, window, document, undefined) {
     "use strict";
 
     // Create the defaults once
@@ -8,9 +8,9 @@
         };
 
     // The actual plugin constructor
-    function Plugin ( element, options ) {
+    function Plugin(element, options) {
         this.element = element;
-        this.settings = $.extend( {}, defaults, options );
+        this.settings = $.extend({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
         this.owner = false;
@@ -19,34 +19,34 @@
     }
 
     // Avoid Plugin.prototype conflicts
-    $.extend( Plugin.prototype, {
-        init: function() {
+    $.extend(Plugin.prototype, {
+        init: function () {
             this.registerExtension();
         },
-        registerExtension: function(owner) {
+        registerExtension: function (owner) {
             var parent = $(this.element).parent();
-            if ( owner ) {
-                owner.registerExtension( this.settings.type, this );
+            if (owner) {
+                owner.registerExtension(this.settings.type, this);
                 this.owner = owner;
-            } else if ( 'plugin_questionEditor' in parent.data() ) {
-                parent.data('plugin_questionEditor').registerExtension( this.settings.type, this );
+            } else if ('plugin_questionEditor' in parent.data()) {
+                parent.data('plugin_questionEditor').registerExtension(this.settings.type, this);
                 this.owner = parent.data('plugin_questionEditor');
             }
         },
 
-        show: function(data) {
-            var content = this.renderHtml( this.parseData( data ) );
-            $('.content', this.element).html('').append( content );
+        show: function (data) {
+            var content = this.renderHtml(this.parseData(data));
+            $('.content', this.element).html('').append(content);
         },
 
-        hide: function() {
+        hide: function () {
             $('.content', this.element).html('');
         },
 
-        getTemplate: function(name) {
+        getTemplate: function (name) {
             var template = $('.template.' + name + '-template', this.element);
 
-            if ( template.length ) {
+            if (template.length) {
                 return template.clone()
                     .removeClass('template')
                     .removeClass(name + '-template');
@@ -55,7 +55,7 @@
             }
         },
 
-        onChange: function(data) {
+        onChange: function (data) {
 
         },
 
@@ -63,77 +63,77 @@
         // Current extension implementation
         //--------------------------------------------------------------------------------------------------------------
 
-        parseData: function( raw ) {
+        parseData: function (raw) {
             return {
                 options: raw && 'options' in raw ? raw.options : [],
                 answers: raw && 'answers' in raw ? raw.answers : []
             };
         },
 
-        changeData: function() {
+        changeData: function () {
             var result = {
                 options: [],
                 answers: []
             };
 
-            $('.content', this.element).find('input[type=text]').each( function() {
-                result.options.push( $(this).val() );
-            } );
+            $('.content', this.element).find('input[type=text]').each(function () {
+                result.options.push($(this).val());
+            });
 
-            $('.content', this.element).find('input[type=checkbox]').each( function(i) {
-                if ( $(this).prop('checked') ) {
-                    result.answers.push( parseInt(i) );
+            $('.content', this.element).find('input[type=checkbox]').each(function (i) {
+                if ($(this).prop('checked')) {
+                    result.answers.push(parseInt(i));
                 }
-            } );
+            });
 
-            this.onChange.apply( this.owner, [result] );
+            this.onChange.apply(this.owner, [result]);
         },
 
-        renderHtml: function( data ) {
+        renderHtml: function (data) {
             var self = this;
 
-            var result = self.getTemplate( 'content' );
+            var result = self.getTemplate('content');
 
             for (var i in data.options) {
-                var item = self.getTemplate( 'item' );
+                var item = self.getTemplate('item');
 
-                item.find( 'input[type=text]').val( data.options[i] );
-                if ( ~data.answers.indexOf( parseInt(i) ) ){
-                    item.find( 'input[type=checkbox]').prop('checked', true);
+                item.find('input[type=text]').val(data.options[i]);
+                if (~data.answers.indexOf(parseInt(i))) {
+                    item.find('input[type=checkbox]').prop('checked', true);
                 }
 
-                result.find('.items').append( item );
+                result.find('.items').append(item);
             }
 
-            result.find('.add').click( function() {
-                result.find('.items').append( self.getTemplate( 'item' ) );
+            result.find('.add').click(function () {
+                result.find('.items').append(self.getTemplate('item'));
                 self.changeData();
-            } );
+            });
 
-            result.on('click', '.remove', function() {
+            result.on('click', '.remove', function () {
                 $(this).closest('.item').remove();
                 self.changeData();
-            } );
+            });
 
-            result.on('change', 'input', function() {
+            result.on('change', 'input', function () {
                 self.changeData();
-            } );
+            });
 
             return result;
         }
 
         //--------------------------------------------------------------------------------------------------------------
 
-    } );
+    });
 
     // A really lightweight plugin wrapper around the constructor,
     // preventing against multiple instantiations
-    $.fn[ pluginName ] = function( options ) {
-        return this.each( function() {
-            if ( !$.data( this, "plugin_questionEditor_extension" ) ) {
-                $.data( this, "plugin_questionEditor_extension", new Plugin( this, options ) );
+    $.fn[pluginName] = function (options) {
+        return this.each(function () {
+            if (!$.data(this, "plugin_questionEditor_extension")) {
+                $.data(this, "plugin_questionEditor_extension", new Plugin(this, options));
             }
-        } );
+        });
     };
 
-} )( jQuery, window, document );
+})(jQuery, window, document);

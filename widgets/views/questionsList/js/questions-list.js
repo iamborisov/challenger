@@ -1,4 +1,4 @@
-;( function( $, window, document, undefined ) {
+;(function ($, window, document, undefined) {
     "use strict";
 
     // Create the defaults once
@@ -10,9 +10,9 @@
         };
 
     // The actual plugin constructor
-    function Plugin ( element, options ) {
+    function Plugin(element, options) {
         this.element = element;
-        this.settings = $.extend( {}, defaults, options );
+        this.settings = $.extend({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
 
@@ -22,9 +22,9 @@
     }
 
     // Avoid Plugin.prototype conflicts
-    $.extend( Plugin.prototype, {
+    $.extend(Plugin.prototype, {
         // INIT
-        init: function() {
+        init: function () {
             this._initSorting();
             this._initButtons();
             this._initModal();
@@ -32,26 +32,26 @@
             this._initData();
         },
 
-        _initSorting: function() {
+        _initSorting: function () {
             var self = this;
 
             $('.list', this.element).sortable({
-                update: function( event, ui ) {
+                update: function (event, ui) {
                     self._updateInputs();
                 }
             });
         },
 
-        _initButtons: function() {
+        _initButtons: function () {
             var self = this;
 
             // remove
-            $('.list', self.element).on('click', '.remove', function() {
-                self.remove( $(this).parent().data('id') );
+            $('.list', self.element).on('click', '.remove', function () {
+                self.remove($(this).parent().data('id'));
             });
         },
 
-        _initModal: function() {
+        _initModal: function () {
             var self = this;
 
             // show modal
@@ -67,64 +67,64 @@
             })
 
             // modal selection
-            self.settings.modal.on('click', '.add', function() {
-                var id =  $(this).data('id');
+            self.settings.modal.on('click', '.add', function () {
+                var id = $(this).data('id');
                 var data = self.settings.modal.data('items');
 
-                if ( $(this).prop('checked') ) {
-                    if ( !(id in data) ) {
+                if ($(this).prop('checked')) {
+                    if (!(id in data)) {
                         data[id] = $(this).data('text');
                     }
                 } else {
-                    if ( id in data ) {
+                    if (id in data) {
                         delete data[id];
                     }
                 }
 
                 self.settings.modal.data('items', data);
                 $('.count', self.settings.modal).text(Object.keys(data).length);
-            } );
+            });
 
             // close modal
-            self.settings.modal.on('click', '.save', function() {
+            self.settings.modal.on('click', '.save', function () {
                 var data = self.settings.modal.data('items');
 
-                for ( var id in data ) {
-                    self.add( id, data[id] );
+                for (var id in data) {
+                    self.add(id, data[id]);
                 }
 
                 self.settings.modal.modal('hide');
-            } );
+            });
 
             // update checkboxes
             function updateModalCheckboxes() {
-                console.log('UP');
                 // previously added items
-                for ( var id in self.data ) {
-                    self.settings.modal.find('[data-id='+id+']').prop("checked", true).prop("disabled", true);
+                for (var id in self.data) {
+                    self.settings.modal.find('[data-id=' + id + ']').prop("checked", true).prop("disabled", true);
                 }
 
                 // current modal selections
                 var data = self.settings.modal.data('items');
-                for ( var id in data ) {
-                    self.settings.modal.find('[data-id='+id+']').prop("checked", true);
+                for (var id in data) {
+                    self.settings.modal.find('[data-id=' + id + ']').prop("checked", true);
                 }
             }
-            self.settings.modal.on('pjax:end', updateModalCheckboxes );
+
+            self.settings.modal.on('pjax:end', updateModalCheckboxes);
             updateModalCheckboxes();
         },
 
-        _initData: function() {
-            for ( var i in this.settings.data.order ) {
+        _initData: function () {
+            for (var i in this.settings.data.order) {
                 var id = this.settings.data.order[i];
-                this.add( id, this.settings.data.items[id] );
+                this.add(id, this.settings.data.items[id]);
             }
         },
 
-        getTemplate: function(name) {
+        getTemplate: function (name) {
             var template = $('.template.' + name + '-template', this.element);
 
-            if ( template.length ) {
+            if (template.length) {
                 return template.clone()
                     .removeClass('template')
                     .removeClass(name + '-template');
@@ -133,8 +133,8 @@
             }
         },
 
-        add: function(id, name) {
-            if ( id in this.data ) {
+        add: function (id, name) {
+            if (id in this.data) {
                 return; // already exists
             }
 
@@ -144,42 +144,42 @@
 
             block.attr('data-id', id);
 
-            block.find('.id').text( id );
-            block.find('.text').text( name );
+            block.find('.id').text(id);
+            block.find('.text').text(name);
 
-            $('.list', this.element).append( block );
+            $('.list', this.element).append(block);
 
             this._updateInputs();
         },
 
-        remove: function(id) {
-            if ( !(id in this.data) ) {
+        remove: function (id) {
+            if (!(id in this.data)) {
                 return; // not found
             }
 
             delete this.data[id];
 
-            $('.list [data-id="'+id+'"]', this.element).remove();
+            $('.list [data-id="' + id + '"]', this.element).remove();
 
             this._updateInputs();
         },
 
-        clear: function() {
-            if ( !Object.keys(this.data).length || confirm( 'Данное действие сбросит уже добавленные задания. Продолжить?' ) ) {
-                for ( var id in this.data ) {
-                    this.remove( id );
+        clear: function () {
+            if (!Object.keys(this.data).length || confirm('Данное действие сбросит уже добавленные задания. Продолжить?')) {
+                for (var id in this.data) {
+                    this.remove(id);
                 }
             }
         },
 
-        _updateInputs: function() {
+        _updateInputs: function () {
             var self = this;
 
-            $('[name="'+self.settings.name+'[question_id][]"]').remove();
-            $('[name="'+self.settings.name+'[position][]"]').remove();
+            $('[name="' + self.settings.name + '[question_id][]"]').remove();
+            $('[name="' + self.settings.name + '[position][]"]').remove();
 
-            $('.item', self.element).each( function(i) {
-                if ( !$(this).data('id') ) {
+            $('.item', self.element).each(function (i) {
+                if (!$(this).data('id')) {
                     return;
                 }
 
@@ -187,26 +187,26 @@
                 iId.attr('type', 'hidden');
                 iId.attr('name', self.settings.name + '[question_id][]');
                 iId.attr('value', $(this).data('id'));
-                $(self.element).append( iId );
+                $(self.element).append(iId);
 
                 var iPos = $('<input>');
                 iPos.attr('type', 'hidden');
                 iPos.attr('name', self.settings.name + '[position][]');
                 iPos.attr('value', i);
-                $(self.element).append( iPos );
-            } );
+                $(self.element).append(iPos);
+            });
         }
-    } );
+    });
 
     // A really lightweight plugin wrapper around the constructor,
     // preventing against multiple instantiations
-    $.fn[ pluginName ] = function( options ) {
-        return this.each( function() {
-            if ( !$.data( this, "plugin_" + pluginName ) ) {
-                $.data( this, "plugin_" +
-                    pluginName, new Plugin( this, options ) );
+    $.fn[pluginName] = function (options) {
+        return this.each(function () {
+            if (!$.data(this, "plugin_" + pluginName)) {
+                $.data(this, "plugin_" +
+                    pluginName, new Plugin(this, options));
             }
-        } );
+        });
     };
 
-} )( jQuery, window, document );
+})(jQuery, window, document);

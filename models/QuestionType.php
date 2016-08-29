@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use app\components\ActiveRecord;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "question_type".
@@ -62,6 +63,37 @@ class QuestionType extends ActiveRecord
     public function getQuestions()
     {
         return $this->hasMany(Question::className(), ['question_type_id' => 'id'])->inverseOf('questionType');
+    }
+
+    public function check( $data, $answer ) {
+        $answer = is_string($answer) ? Json::decode($answer) : $answer;
+
+        switch ( $this->sysname ) {
+            case 'select_one':
+                return $this->checkSelectOne( $data['answers'], $answer );
+            case 'select_multiple':
+                return $this->checkSelectMany( $data['answers'], $answer );
+            case 'text_short':
+                return $this->checkTextShort( $data['answer'], $answer );
+            case 'text_long':
+                return false;
+            case 'dictation':
+                return false;
+            default:
+                return false;
+        }
+    }
+
+    protected function checkSelectOne( $correct, $answer ) {
+        return count($correct) && count($answer) && end($correct) == reset($answer);
+    }
+
+    protected function checkSelectMany( $correct, $answer ) {
+        return count(array_diff($correct, $answer)) == 0;
+    }
+
+    protected function checkTextShort( $correct, $answer ) {
+        return $correct == $answer;
     }
 
 }

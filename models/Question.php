@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use app\components\ActiveRecord;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "question".
@@ -164,5 +165,11 @@ class Question extends ActiveRecord
     public function getSubjects()
     {
         return $this->hasMany(Subject::className(), ['id' => 'subject_id'])->viaTable('question_has_subject', ['question_id' => 'id']);
+    }
+
+    public function check( $answer ) {
+        $data = Json::decode($this->data);
+
+        return $this->getQuestionType()->one()->check( $data, $answer );
     }
 }

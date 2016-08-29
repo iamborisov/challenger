@@ -56,6 +56,7 @@ class ChallengeSession
         if ($this->canStart()) {
             $this->openQueue();
             $this->setCurrentQuestionNumber(0);
+            $this->setStartTime();
 
             return true;
         }
@@ -71,6 +72,7 @@ class ChallengeSession
     {
         $this->saveAnswers();
         $this->closeQueue();
+        $this->setFinishTime();
     }
 
     /**
@@ -97,6 +99,22 @@ class ChallengeSession
     public function isFinished()
     {
         return $this->getCurrentQuestionNumber() >= count($this->getQueue());
+    }
+
+    /**
+     * @return Challenge
+     */
+    public function getChallenge()
+    {
+        return $this->challenge;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -228,6 +246,30 @@ class ChallengeSession
         }
 
         return $queue;
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+// Time tracking
+//----------------------------------------------------------------------------------------------------------------------
+
+    protected function setStartTime()
+    {
+        \Yii::$app->session->set($this->getSessionKey('start'), time());
+    }
+
+    protected function setFinishTime()
+    {
+        \Yii::$app->session->set($this->getSessionKey('finish'), time());
+    }
+
+    public function getStartTime()
+    {
+        return \Yii::$app->session->get($this->getSessionKey('start'));
+    }
+
+    public function getFinishTime()
+    {
+        return \Yii::$app->session->get($this->getSessionKey('finish'));
     }
 
 //----------------------------------------------------------------------------------------------------------------------

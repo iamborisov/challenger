@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\helpers\ChallengeSession;
+use app\helpers\ChallengeSummarizer;
 use app\models\Challenge;
 use Yii;
 use yii\filters\VerbFilter;
@@ -102,10 +103,20 @@ class ChallengeController extends Controller
             return $this->redirect(Url::to(['challenge/progress', 'id' => $challenge->id]));
         }
 
-        return $this->render('finish', [
-            'session' => $session,
-            'challenge' => $challenge
-        ]);
+        if ( count( $session->getAnswers() ) ) {
+            $summary = ChallengeSummarizer::fromSession( $session );
+            if ( !Yii::$app->user->isGuest ) {
+                $summary->saveAttempt();
+            }
+
+            return $this->render('finish', [
+                'challenge' => $challenge,
+                'summary' => $summary
+            ]);
+        } else {
+            // It looks like session wasn't even started
+            return $this->redirect(Url::to(['challenge/start', 'id' => $challenge->id]));
+        }
     }
 
     /**

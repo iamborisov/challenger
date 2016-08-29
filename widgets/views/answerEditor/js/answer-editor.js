@@ -30,7 +30,7 @@
         init: function () {
             this.findExtensions();
 
-            this.setType( this.settings.type, this.settings.data );
+            this.setType(this.settings.type, this.settings.data);
         },
 
         // EXTENSIONS

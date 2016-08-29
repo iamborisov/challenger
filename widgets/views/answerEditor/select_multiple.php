@@ -1,4 +1,4 @@
-<?php $id = uniqid('qe_select_multiple') ?>
+<?php $id = uniqid('ae_select_multiple') ?>
 
 <div id="<?= $id ?>" class="select-multiple answer-editor-extension">
     <div class="content"></div>

@@ -1,5 +1,6 @@
 <?php
     use yii\widgets\ActiveForm;
+    use app\widgets\AnswerEditor;
 
     $currentQuestion = $session->getCurrentQuestionNumber();
     $totalQuestions = $challenge->getQuestionsCount();
@@ -26,16 +27,19 @@
     <div class="panel-body">
         <?= $question->text ?>
 
-        <div class="well">
-            <?php $form = ActiveForm::begin([
-                'action' => ['challenge/answer', 'id' => $challenge->id],
-                'method' => 'post'
-            ]); ?>
+        <?php $form = ActiveForm::begin([
+            'action' => ['challenge/answer', 'id' => $challenge->id],
+            'method' => 'post'
+        ]); ?>
 
-                <input type="text" name="answer">
-                <input type="submit">
+            <?php echo AnswerEditor::widget([
+                'name' => 'answer',
+                'question' => $question
+            ]) ?>
 
-            <?php ActiveForm::end(); ?>
-        </div>
+            <input type="submit">
+
+        <?php ActiveForm::end(); ?>
+
     </div>
 </div>

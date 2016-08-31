@@ -18,6 +18,7 @@ class Course extends \app\models\ar\Course
             'name' => Yii::t('app', 'Name'),
             'description' => Yii::t('app', 'Description'),
             'position' => Yii::t('app', 'Position'),
+            'subjects' => Yii::t('subject', 'Subjects'),
         ];
     }
 }

@@ -17,7 +17,7 @@ use app\widgets\QuestionsList;
 /* @var $model app\models\Challenge */
 /* @var $form yii\widgets\ActiveForm */
 
-$modelSettings = $model->challengeSettings ? $model->challengeSettings : new \app\models\ChallengeSettings();
+$modelSettings = $model->settings ? $model->settings : new \app\models\ChallengeSettings();
 ?>
 
 <div class="challenge-form">
@@ -103,7 +103,7 @@ $modelSettings = $model->challengeSettings ? $model->challengeSettings : new \ap
 
             <div class="form-group">
                 <label class="control-label">Укажите метод составления теста</label>
-                <?= yii\helpers\Html::dropDownList( 'mode', $model->getMode(), $model->getModes(), ['class' => 'form-control'] ) ?>
+                <?= yii\helpers\Html::dropDownList( 'mode', $model->mode, $model->modeLabels(), ['class' => 'form-control'] ) ?>
             </div>
 
             <div class="mode dynamic random">

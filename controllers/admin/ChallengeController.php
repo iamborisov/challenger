@@ -48,7 +48,7 @@ class ChallengeController extends BaseAdminCrudController
             ['challenge_id' => $model->id]
         );
 
-        $modelSettings = $model->challengeSettings ? $model->challengeSettings : new ChallengeSettings();
+        $modelSettings = $model->settings ? $model->settings : new ChallengeSettings();
         $modelSettings->load(Yii::$app->request->post());
         $modelSettings->challenge_id = $model->id;
         return $modelSettings->save();

@@ -5,8 +5,8 @@
 
     <p>Курс: <?= $challenge->course->name ?></p>
     <p>Тема: <?= $challenge->subject->name ?></p>
-    <?php if( $challenge->challengeSettings->limit_time ): ?>
-        <p>Ограничение времени: <?= round($challenge->challengeSettings->limit_time / 60) ?> мин</p>
+    <?php if( $challenge->settings->limit_time ): ?>
+        <p>Ограничение времени: <?= round($challenge->settings->limit_time / 60) ?> мин</p>
     <?php endif; ?>
     <p>Количество заданий: <?= $challenge->getQuestionsCount() ?></p>
 

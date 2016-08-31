@@ -72,7 +72,7 @@ class ChallengeController extends Controller
     {
         $challenge = $this->getChallenge($id);
 
-        if ($challenge->challengeSettings->autostart || $confirm) {
+        if ($challenge->settings->autostart || $confirm) {
 
             $session = new ChallengeSession($challenge, Yii::$app->user->id);
             if ($session->start()) {

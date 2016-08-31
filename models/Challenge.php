@@ -7,6 +7,9 @@ use Yii;
 
 /**
  * @inheritdoc
+ *
+ * @property string $mode
+ * @property ChallengeSettings $settings
  */
 class Challenge extends \app\models\ar\Challenge
 {
@@ -51,6 +54,19 @@ class Challenge extends \app\models\ar\Challenge
     }
 
     /**
+     * Get modes list
+     * @return array
+     */
+    public function modeLabels()
+    {
+        return [
+            self::MODE_STATIC => Yii::t('challenge', 'Mode Static'),
+            self::MODE_DYNAMIC => Yii::t('challenge', 'Mode Dynamic'),
+            self::MODE_RANDOM => Yii::t('challenge', 'Mode Random'),
+        ];
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getChallengeHasQuestions()
@@ -68,6 +84,10 @@ class Challenge extends \app\models\ar\Challenge
             ->viaTable('challenge_has_question', ['challenge_id' => 'id'], function ($query) {
                 $query->orderBy(['position' => SORT_ASC]);
             });
+    }
+
+    public function getSettings() {
+        return $this->hasOne(ChallengeSettings::className(), ['challenge_id' => 'id'])->inverseOf('challenge')->one();
     }
 
     /**
@@ -88,19 +108,6 @@ class Challenge extends \app\models\ar\Challenge
         } else {
             return self::MODE_STATIC;
         }
-    }
-
-    /**
-     * Get modes list
-     * @return array
-     */
-    public function getModes()
-    {
-        return [
-            self::MODE_STATIC => 'Вручную, я сам выберу необходимые задания',
-            self::MODE_DYNAMIC => 'Полуавтоматически, я сам выберу необходимые задания из случайно сгенерированного набора',
-            self::MODE_RANDOM => 'Автоматически, при каждом прохождении будут выбраны случайные задания',
-        ];
     }
 
     /**

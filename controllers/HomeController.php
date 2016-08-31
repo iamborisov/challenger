@@ -3,8 +3,8 @@
 namespace app\controllers;
 
 use app\models\ContactForm;
+use app\models\Course;
 use app\models\LoginForm;
-use app\models\search\CourseSearch;
 use Yii;
 use yii\web\Controller;
 
@@ -36,49 +36,14 @@ class HomeController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new CourseSearch();
-        $dataProvider = $searchModel->searchActive(
-            Yii::$app->user->id,
-            Yii::$app->request->queryParams
-        );
+        $challenges = [];
+
+        foreach (Course::findSubscribed(Yii::$app->user->id)->all() as $course) {
+            $challenges = array_merge($challenges, $course->getNewChallenges(Yii::$app->user->id)->all());
+        }
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * @return string
-     */
-    public function actionSubscriptions()
-    {
-        $searchModel = new CourseSearch();
-        $dataProvider = $searchModel->searchSubscribed(
-            Yii::$app->user->id,
-            Yii::$app->request->queryParams
-        );
-
-        return $this->render('subscriptions', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * @return string
-     */
-    public function actionCourses()
-    {
-        $searchModel = new CourseSearch();
-        $dataProvider = $searchModel->searchAvailable(
-            Yii::$app->user->id,
-            Yii::$app->request->queryParams
-        );
-
-        return $this->render('courses', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'challenges' => $challenges
         ]);
     }
 

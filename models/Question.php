@@ -61,6 +61,14 @@ class Question extends \app\models\ar\Question
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getQuestionType()
+    {
+        return $this->hasOne(QuestionType::className(), ['id' => 'question_type_id'])->inverseOf('questions');
+    }
+
+    /**
      * Check if answer is correct
      * @param $answer
      * @return bool

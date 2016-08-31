@@ -40,7 +40,7 @@ class SiteController extends Controller
         if ( \Yii::$app->user->isGuest ) {
             return $this->render('index');
         } else {
-            return $this->redirect( Url::to('home/index') );
+            return $this->redirect( Url::to(['home/index']) );
         }
 
     }

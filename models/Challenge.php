@@ -173,4 +173,9 @@ class Challenge extends \app\models\ar\Challenge
                 return 0;
         }
     }
+
+    public function getAttemptsCount($user)
+    {
+        return $this->getAttempts()->where(['user_id' => is_object($user) ? $user->id : $user])->count();
+    }
 }

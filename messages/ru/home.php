@@ -2,5 +2,6 @@
 
 return [
     'Home' => 'Моя страница',
-    'Subscriptions' => 'Подписки'
+    'Subscriptions' => 'Мои курсы',
+    'Courses' => 'Все курсы',
 ];

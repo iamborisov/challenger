@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\ContactForm;
 use app\models\LoginForm;
 use Yii;
+use yii\helpers\Url;
 use yii\web\Controller;
 
 /**
@@ -36,7 +37,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        if ( \Yii::$app->user->isGuest ) {
+            return $this->render('index');
+        } else {
+            return $this->redirect( Url::to('home/index') );
+        }
+
     }
 
 }

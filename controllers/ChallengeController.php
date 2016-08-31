@@ -48,7 +48,7 @@ class ChallengeController extends Controller
      */
     public function actionFree()
     {
-        $challenges = Challenge::findFree();
+        $challenges = Challenge::findFree()->all();
 
         if (count($challenges) == 1) {
             $challenge = reset($challenges);

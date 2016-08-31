@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\helpers\Subset;
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * @inheritdoc
@@ -19,7 +20,7 @@ class Challenge extends \app\models\ar\Challenge
 
     /**
      * Get free chalanges
-     * @return array|\yii\db\ActiveRecord[]
+     * @return ActiveQuery
      */
     static public function findFree()
     {
@@ -30,7 +31,7 @@ class Challenge extends \app\models\ar\Challenge
                     'subscription_required' => false,
                 ]);
             }
-        ])->all();
+        ]);
     }
 
     /**

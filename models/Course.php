@@ -9,6 +9,24 @@ use Yii;
  */
 class Course extends \app\models\ar\Course
 {
+    static public function findSubscribed($user) {
+        $subscriptions = CourseSubscription::find()
+            ->select('course_id')
+            ->where(['user_id' => is_object($user) ? $user->id : $user])
+            ->column();
+
+        return self::find()->where(['id' => $subscriptions]);
+    }
+
+    static public function findAvailable($user) {
+        $subscriptions = CourseSubscription::find()
+            ->select('course_id')
+            ->where(['user_id' => is_object($user) ? $user->id : $user])
+            ->column();
+
+        return self::find()->where(['not in', 'id', $subscriptions]);
+    }
+
     /**
      * @inheritdoc
      */

@@ -6,6 +6,7 @@ use app\models\Course;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\db\ActiveQuery;
 
 /**
  * CourseSearch represents the model behind the search form about `app\models\Course`.
@@ -33,7 +34,7 @@ class CourseSearch extends Course
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Search in all courses
      *
      * @param array $params
      *
@@ -41,10 +42,67 @@ class CourseSearch extends Course
      */
     public function search($params)
     {
-        $query = Course::find();
+        return $this->getDataProvider(
+            Course::find(),
+            $params
+        );
+    }
 
-        // add conditions that should always apply here
+    /**
+     * Search in active courses
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function searchActive($user, $params)
+    {
+        return $this->getDataProvider(
+            Course::findSubscribed($user),
+            $params
+        );
+    }
 
+    /**
+     * Search in unsubscribed courses
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function searchAvailable($user, $params)
+    {
+        return $this->getDataProvider(
+            Course::findAvailable($user),
+            $params
+        );
+    }
+
+    /**
+     * Search in subscribed courses
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function searchSubscribed($user, $params)
+    {
+        return $this->getDataProvider(
+            Course::findSubscribed($user),
+            $params
+        );
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param ActiveQuery $query
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    protected function getDataProvider(ActiveQuery $query, $params)
+    {
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

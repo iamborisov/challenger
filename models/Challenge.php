@@ -6,83 +6,20 @@ use app\helpers\Subset;
 use Yii;
 
 /**
- * This is the model class for table "challenge".
- *
- * @property integer $id
- * @property integer $course_id
- * @property integer $challenge_type_id
- * @property integer $element_id
- * @property integer $subject_id
- * @property integer $grade_number
- * @property string $name
- * @property string $description
- * @property integer $exercise_number
- * @property integer $exercise_challenge_number
- *
- * @property Attempt[] $attempts
- * @property Element $element
- * @property Subject $subject
- * @property ChallengeType $challengeType
- * @property Course $course
- * @property ChallengeGeneration[] $challengeGenerations
- * @property ChallengeHasQuestion[] $challengeHasQuestions
- * @property Question[] $questions
- * @property ChallengeMark[] $challengeMarks
- * @property ChallengeSettings $challengeSettings
+ * @inheritdoc
  */
-class Challenge extends \yii\db\ActiveRecord
+class Challenge extends \app\models\ar\Challenge
 {
-
     const MODE_STATIC = 'static';
     const MODE_DYNAMIC = 'dynamic';
     const MODE_RANDOM = 'random';
 
     /**
-     * @inheritdoc
+     * Get free chalanges
+     * @return array|\yii\db\ActiveRecord[]
      */
-    public static function tableName()
+    static public function findFree()
     {
-        return 'challenge';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['course_id', 'challenge_type_id', 'element_id', 'subject_id'], 'required'],
-            [['course_id', 'challenge_type_id', 'element_id', 'subject_id', 'grade_number', 'exercise_number', 'exercise_challenge_number'], 'integer'],
-            [['name', 'description'], 'string'],
-            [['element_id'], 'exist', 'skipOnError' => true, 'targetClass' => Element::className(), 'targetAttribute' => ['element_id' => 'id']],
-            [['subject_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subject::className(), 'targetAttribute' => ['subject_id' => 'id']],
-            [['challenge_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ChallengeType::className(), 'targetAttribute' => ['challenge_type_id' => 'id']],
-            [['course_id'], 'exist', 'skipOnError' => true, 'targetClass' => Course::className(), 'targetAttribute' => ['course_id' => 'id']],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('challenge', 'ID'),
-            'course_id' => Yii::t('challenge', 'Course ID'),
-            'challenge_type_id' => Yii::t('challenge', 'Challenge Type ID'),
-            'element_id' => Yii::t('challenge', 'Element ID'),
-            'subject_id' => Yii::t('challenge', 'Subject ID'),
-            'grade_number' => Yii::t('challenge', 'Grade Number'),
-            'name' => Yii::t('challenge', 'Name'),
-            'description' => Yii::t('challenge', 'Description'),
-            'exercise_number' => Yii::t('challenge', 'Exercise Number'),
-            'exercise_challenge_number' => Yii::t('challenge', 'Exercise Challenge Number'),
-            'challengeHasQuestions' => Yii::t('challenge', 'Challenge Has Questions'),
-            'challengeGenerations' => Yii::t('challenge', 'Challenge Generations'),
-        ];
-    }
-
-    static public function findFree() {
         return self::find()->with([
             'challengeSettings' => function (\yii\db\ActiveQuery $query) {
                 $query->andWhere([
@@ -94,51 +31,24 @@ class Challenge extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @inheritdoc
      */
-    public function getAttempts()
+    public function attributeLabels()
     {
-        return $this->hasMany(Attempt::className(), ['challenge_id' => 'id'])->inverseOf('challenge');
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getElement()
-    {
-        return $this->hasOne(Element::className(), ['id' => 'element_id'])->inverseOf('challenges');
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSubject()
-    {
-        return $this->hasOne(Subject::className(), ['id' => 'subject_id'])->inverseOf('challenges');
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getChallengeType()
-    {
-        return $this->hasOne(ChallengeType::className(), ['id' => 'challenge_type_id'])->inverseOf('challenges');
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCourse()
-    {
-        return $this->hasOne(Course::className(), ['id' => 'course_id'])->inverseOf('challenges');
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getChallengeGenerations()
-    {
-        return $this->hasMany(ChallengeGeneration::className(), ['challenge_id' => 'id'])->inverseOf('challenge');
+        return [
+            'id' => Yii::t('challenge', 'ID'),
+            'course_id' => Yii::t('course', 'Course'),
+            'challenge_type_id' => Yii::t('challengeType', 'Challenge Type'),
+            'element_id' => Yii::t('element', 'Element'),
+            'subject_id' => Yii::t('subject', 'Subject'),
+            'grade_number' => Yii::t('challenge', 'Grade Number'),
+            'name' => Yii::t('challenge', 'Name'),
+            'description' => Yii::t('challenge', 'Description'),
+            'exercise_number' => Yii::t('challenge', 'Exercise Number'),
+            'exercise_challenge_number' => Yii::t('challenge', 'Exercise Challenge Number'),
+            'challengeHasQuestions' => Yii::t('challenge', 'Challenge Has Questions'),
+            'challengeGenerations' => Yii::t('challenge', 'Challenge Generations'),
+        ];
     }
 
     /**
@@ -146,7 +56,7 @@ class Challenge extends \yii\db\ActiveRecord
      */
     public function getChallengeHasQuestions()
     {
-        return $this->hasMany(ChallengeHasQuestion::className(), ['challenge_id' => 'id'])->inverseOf('challenge')->orderBy(['position' => SORT_ASC]);
+        return parent::getChallengeHasQuestions()->orderBy(['position' => SORT_ASC]);
     }
 
     /**
@@ -156,40 +66,25 @@ class Challenge extends \yii\db\ActiveRecord
     {
         return $this
             ->hasMany(Question::className(), ['id' => 'question_id'])
-            ->viaTable('challenge_has_question', ['challenge_id' => 'id'], function($query) {
+            ->viaTable('challenge_has_question', ['challenge_id' => 'id'], function ($query) {
                 $query->orderBy(['position' => SORT_ASC]);
             });
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getChallengeMarks()
-    {
-        return $this->hasMany(ChallengeMark::className(), ['challenge_id' => 'id'])->inverseOf('challenge');
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getChallengeSettings()
-    {
-        return $this->hasOne(ChallengeSettings::className(), ['challenge_id' => 'id'])->inverseOf('challenge');
     }
 
     /**
      * Get question generation mode
      * @return string
      */
-    public function getMode() {
+    public function getMode()
+    {
         $questions = $this->getChallengeHasQuestions()->count();
         $rules = $this->getChallengeGenerations()->count();
 
-        if ( $questions && $rules ) {
+        if ($questions && $rules) {
             return self::MODE_DYNAMIC;
-        } elseif ( $questions ) {
+        } elseif ($questions) {
             return self::MODE_STATIC;
-        } elseif ( $rules )  {
+        } elseif ($rules) {
             return self::MODE_RANDOM;
         } else {
             return self::MODE_STATIC;
@@ -200,7 +95,8 @@ class Challenge extends \yii\db\ActiveRecord
      * Get modes list
      * @return array
      */
-    public function getModes() {
+    public function getModes()
+    {
         return [
             self::MODE_STATIC => 'Вручную, я сам выберу необходимые задания',
             self::MODE_DYNAMIC => 'Полуавтоматически, я сам выберу необходимые задания из случайно сгенерированного набора',
@@ -213,11 +109,12 @@ class Challenge extends \yii\db\ActiveRecord
      * @param $mode
      * @param array $data
      */
-    public function setMode( $mode, $data = null ) {
+    public function setMode($mode, $data = null)
+    {
         ChallengeGeneration::deleteAll(['challenge_id' => $this->id]);
         ChallengeHasQuestion::deleteAll(['challenge_id' => $this->id]);
 
-        switch ( $mode ) {
+        switch ($mode) {
             case self::MODE_STATIC:
                 Subset::save(
                     ChallengeHasQuestion::className(),
@@ -251,15 +148,16 @@ class Challenge extends \yii\db\ActiveRecord
      * Get questions count in this challenge
      * @return int
      */
-    public function getQuestionsCount() {
-        switch ( $this->getMode() ) {
+    public function getQuestionsCount()
+    {
+        switch ($this->getMode()) {
             case self::MODE_STATIC:
             case self::MODE_DYNAMIC:
                 return $this->getChallengeHasQuestions()->count();
 
             case self::MODE_RANDOM:
                 $result = 0;
-                foreach ( $this->getChallengeGenerations() as $rule ) {
+                foreach ($this->getChallengeGenerations() as $rule) {
                     $result += $rule->question_count;
                 }
                 return $result;

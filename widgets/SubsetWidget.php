@@ -101,19 +101,19 @@ class SubsetWidget extends InputWidget
                 $fields[$params] = [
                     'widget' => 'textInput',
                     'params' => [],
-                    'title' => $attributes[$params]
+                    'title' => isset($attributes[$params]) ? $attributes[$params] : $params
                 ];
             } elseif (is_string($name) && is_string($params)) {
                 $fields[$name] = [
                     'widget' => $params,
                     'params' => [],
-                    'title' => $attributes[$name]
+                    'title' => isset($attributes[$name]) ? $attributes[$name] : $name
                 ];
             } elseif (is_string($name) && is_array($params) && count($params)) {
                 $fields[$name] = [
                     'widget' => $params[0],
                     'params' => count($params) > 1 ? $params[1] : [],
-                    'title' => $attributes[$name]
+                    'title' => isset($attributes[$name]) ? $attributes[$name] : $name
                 ];
             } else {
                 throw new Exception('Wrong fields config in SubsetWidget');

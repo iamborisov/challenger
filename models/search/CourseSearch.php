@@ -2,10 +2,10 @@
 
 namespace app\models\search;
 
+use app\models\Course;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Course;
 
 /**
  * CourseSearch represents the model behind the search form about `app\models\Course`.

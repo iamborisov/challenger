@@ -1,11 +1,11 @@
 <?php
 
-namespace app\models;
+namespace app\models\ar;
 
 use Yii;
 
 /**
- * This is the model class for table "challenge_element".
+ * This is the model class for table "element".
  *
  * @property integer $id
  * @property string $name
@@ -14,14 +14,14 @@ use Yii;
  *
  * @property Challenge[] $challenges
  */
-class ChallengeElement extends \yii\db\ActiveRecord
+class Element extends \app\components\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'challenge_element';
+        return 'element';
     }
 
     /**
@@ -41,10 +41,10 @@ class ChallengeElement extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
-            'description' => Yii::t('app', 'Description'),
-            'position' => Yii::t('app', 'Position'),
+            'id' => 'ID',
+            'name' => 'Name',
+            'description' => 'Description',
+            'position' => 'Position',
         ];
     }
 
@@ -53,6 +53,6 @@ class ChallengeElement extends \yii\db\ActiveRecord
      */
     public function getChallenges()
     {
-        return $this->hasMany(Challenge::className(), ['challenge_element_id' => 'id'])->inverseOf('challengeElement');
+        return $this->hasMany(Challenge::className(), ['element_id' => 'id'])->inverseOf('element');
     }
 }

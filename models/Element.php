@@ -15,9 +15,9 @@ class Element extends \app\models\ar\Element
     public function attributeLabels()
     {
         return [
-            'name' => Yii::t('element', 'Name'),
-            'description' => Yii::t('element', 'Description'),
-            'position' => Yii::t('element', 'Position'),
+            'name' => Yii::t('app', 'Name'),
+            'description' => Yii::t('app', 'Description'),
+            'position' => Yii::t('app', 'Position'),
         ];
     }
 }

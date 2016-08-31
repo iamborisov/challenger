@@ -37,9 +37,9 @@ $modelSettings = $model->challengeSettings ? $model->challengeSettings : new \ap
 
     <ul class="nav nav-tabs" id="tabs">
         <li role="presentation" class="active"><a href="#challenge"><?= Yii::t('challenge', 'Challenge') ?></a></li>
-        <li role="presentation"><a href="#questions"><?= Yii::t('challenge', 'Questions') ?></a></li>
+        <li role="presentation"><a href="#questions"><?= Yii::t('question', 'Questions') ?></a></li>
         <li role="presentation"><a href="#settings"><?= Yii::t('challenge', 'Settings') ?></a></li>
-        <li role="presentation"><a href="#marks"><?= Yii::t('challenge', 'Marks') ?></a></li>
+        <li role="presentation"><a href="#marks"><?= Yii::t('challengeMark', 'Marks') ?></a></li>
     </ul>
 
     <br>

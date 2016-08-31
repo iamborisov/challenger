@@ -54,9 +54,9 @@ class Question extends \app\models\ar\Question
             'comment' => Yii::t('question', 'Comment'),
             'cost' => Yii::t('question', 'Cost'),
 
-            'courses_ids' => Yii::t('course', 'Courses'),
-            'subjects_ids' => Yii::t('subject', 'Subjects'),
-            'challengeTypes_ids' => Yii::t('challengeType', 'Challenge Types')
+            'courses_ids' => Yii::t('question', 'Courses'),
+            'subjects_ids' => Yii::t('question', 'Subjects'),
+            'challengeTypes_ids' => Yii::t('question', 'Challenge Types')
         ];
     }
 

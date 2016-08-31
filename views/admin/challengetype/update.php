@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\ChallengeType */
 
-$this->title = Yii::t('challengeType', 'Update Challenge Type: ') . ': ' . $model->name;
+$this->title = Yii::t('app', 'Update') . ' ' . Yii::t('challengeType', 'Challenge Type') . ': ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Admin'), 'url' => ['admin/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('challengeType', 'Challenge Types'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];

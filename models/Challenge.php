@@ -36,7 +36,6 @@ class Challenge extends \app\models\ar\Challenge
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('challenge', 'ID'),
             'course_id' => Yii::t('course', 'Course'),
             'challenge_type_id' => Yii::t('challengeType', 'Challenge Type'),
             'element_id' => Yii::t('element', 'Element'),

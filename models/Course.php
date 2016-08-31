@@ -15,9 +15,9 @@ class Course extends \app\models\ar\Course
     public function attributeLabels()
     {
         return [
-            'name' => Yii::t('course', 'Name'),
-            'description' => Yii::t('course', 'Description'),
-            'position' => Yii::t('course', 'Position'),
+            'name' => Yii::t('app', 'Name'),
+            'description' => Yii::t('app', 'Description'),
+            'position' => Yii::t('app', 'Position'),
         ];
     }
 }

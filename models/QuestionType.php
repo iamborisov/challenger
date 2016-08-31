@@ -16,7 +16,7 @@ class QuestionType extends \app\models\ar\QuestionType
     public function attributeLabels()
     {
         return [
-            'name' => Yii::t('questionType', 'Name'),
+            'name' => Yii::t('app', 'Name'),
             'sysname' => Yii::t('questionType', 'Sysname'),
         ];
     }

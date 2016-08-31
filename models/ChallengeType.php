@@ -15,9 +15,9 @@ class ChallengeType extends \app\models\ar\ChallengeType
     public function attributeLabels()
     {
         return [
-            'name' => Yii::t('challengeType', 'Name'),
-            'description' => Yii::t('challengeType', 'Description'),
-            'position' => Yii::t('challengeType', 'Position'),
+            'name' => Yii::t('app', 'Name'),
+            'description' => Yii::t('app', 'Description'),
+            'position' => Yii::t('app', 'Position'),
         ];
     }
 

@@ -16,8 +16,8 @@ class ChallengeGeneration extends \app\models\ar\ChallengeGeneration
     {
         return [
             'challenge_id' => Yii::t('challenge', 'Challenge'),
-            'question_type_id' => Yii::t('challenge', 'Question Type'),
-            'question_count' => Yii::t('challenge', 'Question Count'),
+            'question_type_id' => Yii::t('questionType', 'Question Type'),
+            'question_count' => Yii::t('challengeGeneration', 'Question Count'),
         ];
     }
 }

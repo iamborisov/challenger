@@ -17,7 +17,7 @@ class ChallengeHasQuestion extends \app\models\ar\ChallengeHasQuestion
         return [
             'challenge_id' => Yii::t('challenge', 'Challenge'),
             'question_id' => Yii::t('question', 'Question'),
-            'position' => Yii::t('challengeHasQuestion', 'Position'),
+            'position' => Yii::t('app', 'Position'),
         ];
     }
 }

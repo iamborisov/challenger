@@ -15,10 +15,10 @@ class Subject extends \app\models\ar\Subject
     public function attributeLabels()
     {
         return [
-            'course_id' => Yii::t('course', 'Course ID'),
-            'name' => Yii::t('subject', 'Name'),
-            'description' => Yii::t('subject', 'Description'),
-            'position' => Yii::t('subject', 'Position'),
+            'course_id' => Yii::t('course', 'Course'),
+            'name' => Yii::t('app', 'Name'),
+            'description' => Yii::t('app', 'Description'),
+            'position' => Yii::t('app', 'Position'),
         ];
     }
 }

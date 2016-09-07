@@ -64,7 +64,9 @@
         //--------------------------------------------------------------------------------------------------------------
 
         parseData: function (raw) {
-            return {};
+            return {
+                options: raw && 'options' in raw ? raw.options : []
+            };
         },
 
         changeAnswer: function () {
@@ -77,6 +79,14 @@
             var self = this;
 
             var result = self.getTemplate('content');
+
+            for (var i in data.options) {
+                var item = self.getTemplate('item');
+
+                item.find('.text').text(data.options[i]);
+
+                result.find('.items').append(item);
+            }
 
             result.on('change', 'input', function () {
                 self.changeAnswer();

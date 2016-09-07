@@ -65,14 +65,20 @@
 
         parseData: function (raw) {
             return {
+                options: raw && 'options' in raw ? raw.options : [],
                 answer: raw && 'answer' in raw ? raw.answer : ''
             };
         },
 
         changeData: function () {
             var result = {
+                options: [],
                 answer: $('.content', this.element).find('input[type=text]').val()
             };
+
+            $('.content', this.element).find('.item input[type=text]').each(function () {
+                result.options.push($(this).val());
+            });
 
             this.onChange.apply(this.owner, [result]);
         },
@@ -81,6 +87,24 @@
             var self = this;
 
             var result = self.getTemplate('content');
+
+            for (var i in data.options) {
+                var item = self.getTemplate('item');
+
+                item.find('input[type=text]').val(data.options[i]);
+
+                result.find('.items').append(item);
+            }
+
+            result.find('.add').click(function () {
+                result.find('.items').append(self.getTemplate('item'));
+                self.changeData();
+            });
+
+            result.on('click', '.remove', function () {
+                $(this).closest('.item').remove();
+                self.changeData();
+            });
 
             result.on('change', 'input', function () {
                 self.changeData();

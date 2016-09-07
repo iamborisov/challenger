@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'Subject' => 'Предмет',
-    'Subjects' => 'Предметы',
+    'Subject' => 'Тема',
+    'Subjects' => 'Темы',
 ];

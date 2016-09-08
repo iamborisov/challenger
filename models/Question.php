@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\helpers\QuestionChecker;
 use Yii;
 use yii\helpers\Json;
 
@@ -75,8 +76,13 @@ class Question extends \app\models\ar\Question
      */
     public function check($answer)
     {
-        $data = Json::decode($this->data);
+        return QuestionChecker::check($this, $answer);
+    }
 
-        return $this->getQuestionType()->one()->check($data, $answer);
+    /**
+     * @return array
+     */
+    public function getData() {
+        return Json::decode($this->data);
     }
 }

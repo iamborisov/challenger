@@ -41,6 +41,9 @@ class AnswerEditor extends \yii\base\Widget
 
         // register assets
         $this->getView()->registerJsFile(
+            $this->publishAsset('js/jquery.ui.touch.js')
+        );
+        $this->getView()->registerJsFile(
             $this->publishAsset('js/answer-editor.js')
         );
         $this->getView()->registerCssFile(

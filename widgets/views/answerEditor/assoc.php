@@ -4,10 +4,10 @@
     <div class="content"></div>
     <div class="template content-template">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-xs-6 col-md-6">
                 <div class="options-left"></div>
             </div>
-            <div class="col-md-6">
+            <div class="col-xs-6 col-md-6">
                 <div class="options-right"></div>
             </div>
         </div>

@@ -85,4 +85,27 @@ class Question extends \app\models\ar\Question
     public function getData() {
         return Json::decode($this->data);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeDelete()
+    {
+        if( parent::beforeDelete() ) {
+            $cond = ['question_id' => $this->id];
+
+            ChallengeHasQuestion::deleteAll($cond);
+
+            QuestionHasCourse::deleteAll($cond);
+            QuestionHasChallengeType::deleteAll($cond);
+            QuestionHasSubject::deleteAll($cond);
+
+            Answer::deleteAll($cond);
+
+            return true;
+        }
+
+        return false;
+    }
+
 }

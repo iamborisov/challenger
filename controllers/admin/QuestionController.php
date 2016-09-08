@@ -12,6 +12,11 @@ use Yii;
  */
 class QuestionController extends BaseAdminCrudController
 {
+    public function behaviors()
+    {
+        return [];
+    }
+
     /**
      * @inheritdoc
      */
@@ -27,5 +32,23 @@ class QuestionController extends BaseAdminCrudController
     {
         return QuestionSearch::className();
     }
+
+    public function actionDelete($id)
+    {
+        /** @var Question $model */
+        $model = $this->findModel($id);
+
+        $challenges = $model->getChallenges()->all();
+
+        if ( count($challenges) && !Yii::$app->request->post('confirm') ) {
+            return $this->render('delete', [
+                'model' => $model,
+                'challenges' => $challenges
+            ]);
+        }
+
+        return parent::actionDelete($id);
+    }
+
 
 }

@@ -86,6 +86,7 @@ $this->title = \Yii::$app->name;
                     <a class="btn btn-default" href="<?= yii\helpers\Url::toRoute('rbac/role/index') ?>">Роли</a>
                     <a class="btn btn-default" href="<?= yii\helpers\Url::toRoute('rbac/permission/index') ?>">Разрешения</a>
                     <a class="btn btn-default" href="<?= yii\helpers\Url::toRoute('admin/challengetype/index') ?>">Типы тестов</a>
+                    <a class="btn btn-default" href="<?= yii\helpers\Url::toRoute('admin/discipline/index') ?>">Предметы</a>
                 </p>
             </div>
         </div>

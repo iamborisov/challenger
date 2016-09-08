@@ -11,8 +11,10 @@ use Yii;
  * @property string $name
  * @property string $description
  * @property integer $position
+ * @property integer $discipline_id
  *
  * @property Challenge[] $challenges
+ * @property Discipline $discipline
  * @property CourseSubscription[] $courseSubscriptions
  * @property User[] $users
  * @property QuestionHasCourse[] $questionHasCourses
@@ -36,7 +38,9 @@ class Course extends \app\components\ActiveRecord
     {
         return [
             [['name', 'description'], 'string'],
-            [['position'], 'integer'],
+            [['position', 'discipline_id'], 'integer'],
+            [['discipline_id'], 'required'],
+            [['discipline_id'], 'exist', 'skipOnError' => true, 'targetClass' => Discipline::className(), 'targetAttribute' => ['discipline_id' => 'id']],
         ];
     }
 
@@ -50,6 +54,7 @@ class Course extends \app\components\ActiveRecord
             'name' => 'Name',
             'description' => 'Description',
             'position' => 'Position',
+            'discipline_id' => 'Discipline ID',
         ];
     }
 
@@ -59,6 +64,14 @@ class Course extends \app\components\ActiveRecord
     public function getChallenges()
     {
         return $this->hasMany(Challenge::className(), ['course_id' => 'id'])->inverseOf('course');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDiscipline()
+    {
+        return $this->hasOne(Discipline::className(), ['id' => 'discipline_id'])->inverseOf('courses');
     }
 
     /**

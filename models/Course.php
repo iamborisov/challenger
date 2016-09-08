@@ -39,6 +39,7 @@ class Course extends \app\models\ar\Course
             'description' => Yii::t('app', 'Description'),
             'position' => Yii::t('app', 'Position'),
             'subjects' => Yii::t('subject', 'Subjects'),
+            'discipline_id' => Yii::t('discipline', 'Discipline'),
         ];
     }
 

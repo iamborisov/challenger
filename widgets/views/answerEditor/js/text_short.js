@@ -80,10 +80,19 @@
 
             var result = self.getTemplate('content');
 
-            for (var i in data.options) {
+            // shuffle options
+            var ids = Object.keys(data.options);
+            for (var i = ids.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = ids[i];
+                ids[i] = ids[j];
+                ids[j] = temp;
+            }
+
+            for (var i in ids) {
                 var item = self.getTemplate('item');
 
-                item.find('.text').text(data.options[i]);
+                item.find('.text').text(data.options[ids[i]]);
 
                 result.find('.items').append(item);
             }

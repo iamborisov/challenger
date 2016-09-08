@@ -79,8 +79,8 @@ class QuestionChecker
             return false;
         }
 
-        foreach ($answer as $i => $pair) {
-            if ($pair[0] != $i || $pair[1] != $i) {
+        foreach ($answer as $pair) {
+            if ($pair[0] != $pair[1]) {
                 return false;
             }
         }

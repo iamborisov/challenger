@@ -74,7 +74,7 @@
 
             $('.content', this.element).find('input[type=checkbox]').each(function (i) {
                 if ($(this).prop('checked')) {
-                    result.push(parseInt(i));
+                    result.push(parseInt($(this).val()));
                 }
             });
 
@@ -86,15 +86,26 @@
 
             var result = self.getTemplate('content');
 
-            for (var i in data.options) {
+            // shuffle options
+            var ids = Object.keys(data.options);
+            for (var i = ids.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = ids[i];
+                ids[i] = ids[j];
+                ids[j] = temp;
+            }
+
+            // render options
+            for (var i in ids) {
                 var item = self.getTemplate('item');
 
-                item.find('input').val(i);
-                item.find('.text').text(data.options[i]);
+                item.find('input').val(ids[i]);
+                item.find('.text').text(data.options[ids[i]]);
 
                 result.find('.items').append(item);
             }
 
+            // bind select
             result.on('change', 'input', function () {
                 self.changeAnswer();
             });

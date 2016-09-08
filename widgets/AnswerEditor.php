@@ -2,6 +2,7 @@
 
 namespace app\widgets;
 
+use app\helpers\QuestionClientizer;
 use app\models\Question;
 use app\models\QuestionType;
 use Yii;
@@ -54,21 +55,12 @@ class AnswerEditor extends \yii\base\Widget
             );
         }
 
-        // remove answer from question data
-        $data = $this->question ? Json::decode( $this->question->data ) : [];
-        if ( isset( $data['answer'] ) ) {
-            unset( $data['answer'] );
-        }
-        if ( isset( $data['answers'] ) ) {
-            unset( $data['answers'] );
-        }
-
         // render widget
         echo $this->render('answerEditor/default', [
             'name' => $this->name,
             'types' => $types,
             'type' => $this->question->questionType->sysname,
-            'data' => $data
+            'data' => QuestionClientizer::prepare($this->question)
         ]);
     }
 

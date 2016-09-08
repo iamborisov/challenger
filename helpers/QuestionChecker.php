@@ -5,9 +5,11 @@ namespace app\helpers;
 use app\models\Question;
 use yii\helpers\Json;
 
-class QuestionChecker {
+class QuestionChecker
+{
 
-    public static function check(Question $question, $answer) {
+    public static function check(Question $question, $answer)
+    {
         $data = $question->getData();
         $answer = is_string($answer) ? Json::decode($answer) : $answer;
 
@@ -62,7 +64,7 @@ class QuestionChecker {
      */
     protected static function checkTextShort($correct, $answer)
     {
-        $answer = trim( $answer );
+        $answer = trim($answer);
         return strcasecmp($correct, $answer) == 0;
     }
 
@@ -73,12 +75,12 @@ class QuestionChecker {
      */
     protected static function checkAssoc($answer)
     {
-        if ( !is_array($answer) || !count($answer) ) {
+        if (!is_array($answer) || !count($answer)) {
             return false;
         }
 
-        foreach ( $answer as $i => $pair ) {
-            if ( $pair[0] != $i || $pair[1] != $i ) {
+        foreach ($answer as $i => $pair) {
+            if ($pair[0] != $i || $pair[1] != $i) {
                 return false;
             }
         }

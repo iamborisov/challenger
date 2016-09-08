@@ -169,7 +169,7 @@ class ChallengeSummarizer
             $answer->attempt_id = $attempt->id;
             $answer->question_id = $question->id;
             $answer->data = $this->answers[$question->id];
-            $answer->correct = (int) $correct[$question->id];
+            $answer->correct = (int)$correct[$question->id];
             $answer->save();
         }
 

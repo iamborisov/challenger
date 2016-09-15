@@ -23,7 +23,12 @@ class HomeController extends Controller
     {
         if (parent::beforeAction($action)) {
             // Authorized users only
-            return !\Yii::$app->user->isGuest;
+            if ( \Yii::$app->user->isGuest ) {
+                $this->redirect( ['user/login'] );
+                return false;
+            }
+
+            return true;
         }
 
         return false;

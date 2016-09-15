@@ -6,6 +6,11 @@
     $totalQuestions = $challenge->getQuestionsCount();
 
     $question = $session->getCurrentQuestion();
+
+/**
+ * @var \app\models\Question $question
+ * @var \app\models\Challenge $challenge
+ */
 ?>
 <h1><?= $challenge->name ?></h1>
 <div class="panel panel-default">
@@ -13,14 +18,13 @@
         Задание <?= $currentQuestion + 1 ?> из <?= $totalQuestions ?>
         <div class="pull-right" style="width: 30%;">
             <div class="progress">
-                <div
-                    class="progress-bar progress-bar-info progress-bar-striped"
-                    role="progressbar"
-                    aria-valuenow="<?= $currentQuestion + 1 ?>"
-                    aria-valuemin="0"
-                    aria-valuemax="<?= $totalQuestions - 1 ?>"
-                    style="width: <?= floor( $currentQuestion / $totalQuestions * 100) ?>%"
-                ></div>
+                <?php if( $challenge->settings->immediate_result ): ?>
+                    <?php foreach( \app\helpers\ChallengeSummarizer::fromSession( $session )->getCorrectness() as $correctness ): ?>
+                        <div class="progress-bar progress-bar-<?= $correctness ? 'success' : 'danger' ?>" style="width: <?= floor( 100 / $totalQuestions ) ?>%"></div>
+                    <?php endforeach;?>
+                <?php else: ?>
+                    <div class="progress-bar progress-bar-info" style="width: <?= floor( $currentQuestion / $totalQuestions * 100) ?>%"></div>
+                <?php endif;?>
             </div>
         </div>
     </div>

@@ -54,6 +54,7 @@ class ChallengeSession
     public function start()
     {
         if ($this->canStart()) {
+            $this->clearAnswers();
             $this->openQueue();
             $this->setCurrentQuestionNumber(0);
             $this->setStartTime();
@@ -70,7 +71,6 @@ class ChallengeSession
      */
     public function finish()
     {
-        $this->saveAnswers();
         $this->closeQueue();
         $this->setFinishTime();
     }
@@ -157,40 +157,30 @@ class ChallengeSession
      */
     protected function storeAnswer($answer)
     {
-        \Yii::$app->session->set($this->getSessionKey('answer-' . $this->getCurrentQuestionNumber()), $answer);
-    }
+        $answers = $this->getAnswers();
+        $queue = $this->getQueue();
+        $question = $queue[$this->getCurrentQuestionNumber()];
 
-    /**
-     * Clear temporary answers storage and combine answers into QuestionID => Answer array
-     */
-    protected function saveAnswers()
-    {
-        $answers = [];
-
-        foreach ($this->getQueue() as $i => $id) {
-            $answers[$id] = \Yii::$app->session->get($this->getSessionKey('answer-' . $i), []);
-            \Yii::$app->session->remove($this->getSessionKey('answer-' . $i));
-        }
+        $answers[ $question ] = $answer;
 
         \Yii::$app->session->set($this->getSessionKey('answers'), $answers);
     }
 
     /**
-     * Get all answers (available after challenge finish)
+     * Reset answers array in session
+     */
+    protected function clearAnswers()
+    {
+        \Yii::$app->session->remove($this->getSessionKey('answers'));
+    }
+
+    /**
+     * Get all answers
      * @return array
      */
     public function getAnswers()
     {
         return \Yii::$app->session->get($this->getSessionKey('answers'), []);
-    }
-
-    /**
-     * Get current question answer
-     * @return string
-     */
-    public function getAnswer()
-    {
-        return \Yii::$app->session->get($this->getSessionKey('answer-' . $this->getCurrentQuestionNumber()), '');
     }
 
 //----------------------------------------------------------------------------------------------------------------------

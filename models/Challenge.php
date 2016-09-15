@@ -18,6 +18,8 @@ class Challenge extends \app\models\ar\Challenge
     const MODE_DYNAMIC = 'dynamic';
     const MODE_RANDOM = 'random';
 
+    private $_settings = null;
+
     /**
      * Get free chalanges
      * @return ActiveQuery
@@ -87,8 +89,15 @@ class Challenge extends \app\models\ar\Challenge
             });
     }
 
+    /**
+     * @return ChallengeSettings
+     */
     public function getSettings() {
-        return $this->hasOne(ChallengeSettings::className(), ['challenge_id' => 'id'])->inverseOf('challenge')->one();
+        if ( is_null($this->_settings) ) {
+            $this->_settings = $this->hasOne(ChallengeSettings::className(), ['challenge_id' => 'id'])->inverseOf('challenge')->one();
+        }
+
+        return $this->_settings;
     }
 
     /**

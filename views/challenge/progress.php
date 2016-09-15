@@ -37,9 +37,30 @@
                 'question' => $question
             ]) ?>
 
-            <input type="submit">
+            <div class="hint-content alert alert-info" role="alert" style="display: none;">
+                <strong>Подсказка:</strong> <?= $question->hint ?>
+            </div>
+
+        <div class="row">
+            <div class="col-xs-6 col-md-6 text-left">
+                <input type="submit" class="btn btn-success" value="Ответить">
+            </div>
+            <div class="col-xs-6 col-md-6 text-right">
+                <a href="#" class="btn btn-primary hint-button">Подсказать</a>
+            </div>
+        </div>
 
         <?php ActiveForm::end(); ?>
 
     </div>
 </div>
+
+<script>
+    $(function(){
+        $('.hint-button').click( function() {
+            $('.hint-content').show();
+            $(this).addClass('disabled');
+            return false;
+        } );
+    });
+</script>

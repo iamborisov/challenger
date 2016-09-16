@@ -73,7 +73,7 @@
         changeData: function () {
             var result = {
                 options: [],
-                answer: $('.content', this.element).find('input[type=text]').val()
+                answer: $('.content', this.element).find('.answer').val()
             };
 
             $('.content', this.element).find('.item input[type=text]').each(function () {

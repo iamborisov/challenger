@@ -11,7 +11,7 @@
             </div>
         </div>
         <label>Ответ:</label>
-        <input type="text" class="form-control">
+        <input type="text" class="form-control answer">
     </div>
     <div class="template item-template item row">
         <div class="col-xs-10 col-md-11"><input type="text" class="form-control"></div>

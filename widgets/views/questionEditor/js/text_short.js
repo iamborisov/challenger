@@ -96,6 +96,8 @@
                 result.find('.items').append(item);
             }
 
+            result.find('.answer').val(data.answer);
+
             result.find('.add').click(function () {
                 result.find('.items').append(self.getTemplate('item'));
                 self.changeData();

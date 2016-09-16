@@ -30,6 +30,7 @@ class QuestionChecker
                 return false;
 
             case 'assoc':
+            case 'assoc_table':
                 return self::checkAssoc($answer);
 
             default:

@@ -65,7 +65,8 @@ class QuestionChecker
      */
     protected static function checkTextShort($correct, $answer)
     {
-        $answer = trim($answer);
+        $correct = mb_strtolower(trim($correct));
+        $answer = mb_strtolower(trim($answer));
         return strcasecmp($correct, $answer) == 0;
     }
 

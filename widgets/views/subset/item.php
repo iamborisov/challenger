@@ -27,15 +27,15 @@
             }
         ?>
         <?php if( $config['widget'] == 'hiddenInput' ): ?>
-            <?= call_user_func_array( [$field, $config['widget']], $params ); ?>
+            <td class="hidden"><?= call_user_func_array( [$field, $config['widget']], $params ); ?></td>
         <?php else: ?>
             <td><?= call_user_func_array( [$field, $config['widget']], $params ); ?></td>
         <?php endif; ?>
     <?php endforeach; ?>
 
     <?php if ( $add ): ?>
-        <th class="text-right">
+        <td class="text-right">
             <a class="btn btn-danger" onclick="if(confirm('Удалить элемент?')) $(this).closest('tr').remove()">Удалить</a>
-        </th>
+        </td>
     <?php endif;?>
 </tr>

@@ -6,7 +6,8 @@
         defaults = {
             data: {},
             modal: false,
-            name: ''
+            name: '',
+            link: ''
         };
 
     // The actual plugin constructor
@@ -146,6 +147,7 @@
 
             block.find('.id').text(id);
             block.find('.text').text(name);
+            block.find('.link').attr('href', this.settings.link + id);
 
             $('.list', this.element).append(block);
 

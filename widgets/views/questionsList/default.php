@@ -9,7 +9,7 @@ $id = $id ? $id : uniqid('ql');
     </ul>
 
     <li class="template item-template item">
-        #<span class="id"></span>
+        <a class="link" target="_blank">#<span class="id"></span></a>
         <span class="text"></span>
         <a class="btn btn-danger remove pull-right btn-xs">Удалить</a>
     </li>
@@ -30,7 +30,8 @@ $id = $id ? $id : uniqid('ql');
                 order: <?= \yii\helpers\Json::encode(array_keys($data)) ?>
             },
             modal: $('<?= $modalSelector ?>'),
-            name: '<?= $name ?>'
+            name: '<?= $name ?>',
+            link: '<?= \yii\helpers\Url::to(['admin/question/update', 'id' => '']) ?>'
         });
     });
 </script>

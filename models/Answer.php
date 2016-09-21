@@ -19,6 +19,7 @@ class Answer extends \app\models\ar\Answer
             'question_id' => Yii::t('question', 'Question'),
             'data' => Yii::t('answer', 'Data'),
             'correct' => Yii::t('answer', 'Correct'),
+            'hint' => Yii::t('answer', 'Hint'),
         ];
     }
 

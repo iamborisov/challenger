@@ -1,6 +1,12 @@
 <?php
+/**
+ * @var \app\helpers\ChallengeSummarizer $summary
+ */
+
     $questions = $summary->getQuestions();
     $results = $summary->getCorrectness();
+    $hints = $summary->getHints();
+    $points = $summary->getPoints();
 ?>
 <div class="jumbotron">
     <h1><?= $challenge->name ?></h1>
@@ -20,19 +26,23 @@
                 </a>
             </h4>
         </div>
-        <div id="summary" class="panel-collapse collapse" role="tabpanel" aria-labelledby="summaryHead">
+        <div id="summary" class="panel-collapse" role="tabpanel" aria-labelledby="summaryHead">
             <div class="panel-body">
                 <table class="table table-condensed table-hover">
                     <tr>
                         <th class="col-md-1">#</th>
-                        <th class="col-md-9">Задание</th>
-                        <th class="col-md-2 text-center">Результат</th>
+                        <th class="col-md-7">Задание</th>
+                        <th class="col-md-1 text-center">Подсказка</th>
+                        <th class="col-md-2 text-center">Ответ</th>
+                        <th class="col-md-1 text-center">Балл</th>
                     </tr>
                 <?php foreach( $summary->getQuestions() as $i => $question ): ?>
                     <tr>
                         <td class="text-left"><?= $i + 1 ?></td>
                         <td class="text-left"><?= $question->text ?></td>
+                        <td class="<?= !$hints[$question->id] ? 'success' : 'danger' ?>"><?= !$hints[$question->id] ? 'Нет' : 'Да' ?></td>
                         <td class="<?= $results[$question->id] ? 'success' : 'danger' ?>"><?= $results[$question->id] ? 'Верно' : 'Ошибка' ?></td>
+                        <td class=""><?= $points[$question->id] ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </table>

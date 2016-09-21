@@ -103,9 +103,9 @@ class ChallengeController extends Controller
             return $this->redirect(Url::to(['challenge/progress', 'id' => $challenge->id]));
         }
 
-        if ( count( $session->getAnswers() ) ) {
-            $summary = ChallengeSummarizer::fromSession( $session );
-            if ( !Yii::$app->user->isGuest ) {
+        if (count($session->getAnswers())) {
+            $summary = ChallengeSummarizer::fromSession($session);
+            if (!Yii::$app->user->isGuest) {
                 $summary->saveAttempt();
             }
 
@@ -149,7 +149,6 @@ class ChallengeController extends Controller
     public function actionAnswer($id = 0)
     {
         $challenge = $this->getChallenge($id);
-
         $session = new ChallengeSession($challenge, Yii::$app->user->id);
 
         if (!$session->isFinished()) {
@@ -161,6 +160,19 @@ class ChallengeController extends Controller
         } else {
             return $this->redirect(Url::to(['challenge/progress', 'id' => $challenge->id]));
         }
+    }
+
+    /**
+     * Get question hint
+     * @param int $id
+     */
+    public function actionHint($id = 0)
+    {
+        $challenge = $this->getChallenge($id);
+        $session = new ChallengeSession($challenge, Yii::$app->user->id);
+
+        //Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return $session->hint();
     }
 
     /**

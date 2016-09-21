@@ -12,6 +12,7 @@ use Yii;
  * @property integer $question_id
  * @property string $data
  * @property integer $correct
+ * @property integer $hint
  *
  * @property Attempt $attempt
  * @property Question $question
@@ -33,7 +34,7 @@ class Answer extends \app\components\ActiveRecord
     {
         return [
             [['attempt_id', 'question_id'], 'required'],
-            [['attempt_id', 'question_id', 'correct'], 'integer'],
+            [['attempt_id', 'question_id', 'correct', 'hint'], 'integer'],
             [['data'], 'string'],
             [['attempt_id'], 'exist', 'skipOnError' => true, 'targetClass' => Attempt::className(), 'targetAttribute' => ['attempt_id' => 'id']],
             [['question_id'], 'exist', 'skipOnError' => true, 'targetClass' => Question::className(), 'targetAttribute' => ['question_id' => 'id']],
@@ -51,6 +52,7 @@ class Answer extends \app\components\ActiveRecord
             'question_id' => 'Question ID',
             'data' => 'Data',
             'correct' => 'Correct',
+            'hint' => 'Hint',
         ];
     }
 

@@ -40,6 +40,11 @@ class ChallengeSummarizer
     protected $correct = [];
 
     /**
+     * @var bool[]
+     */
+    protected $hints = [];
+
+    /**
      * @var Challenge
      */
     protected $challenge = false;
@@ -62,8 +67,10 @@ class ChallengeSummarizer
         $inst->setStartTime($session->getStartTime());
         $inst->setFinishTime($session->getFinishTime());
 
+        $hints = $session->getHints();
         foreach ($session->getAnswers() as $question => $answer) {
-            $inst->addAnswer($question, $answer);
+            $hint = isset($hints[$question]) && $hints[$question];
+            $inst->addAnswer($question, $answer, null, $hint);
         }
 
         foreach ($session->getChallenge()->getChallengeMarks()->all() as $range) {
@@ -85,7 +92,7 @@ class ChallengeSummarizer
         $inst->setFinishTime(strtotime($attempt->finish_time));
 
         foreach ($attempt->getAnswers() as $answer) {
-            $inst->addAnswer($answer->question_id, $answer->data, $answer->correct);
+            $inst->addAnswer($answer->question_id, $answer->data, $answer->correct, $answer->hint);
         }
 
         foreach ($attempt->getChallenge()->getChallengeMarks()->all() as $range) {
@@ -112,9 +119,10 @@ class ChallengeSummarizer
      * @param $answer
      * @param null|bool $correct If null answer will be checked automaticaly
      */
-    public function addAnswer($question, $answer, $correct = null)
+    public function addAnswer($question, $answer, $correct = null, $hintUsed = false)
     {
         $this->answers[$question] = $answer;
+        $this->hints[$question] = $hintUsed;
 
         if (!is_null($correct)) {
             $this->correct[$question] = $correct;
@@ -170,6 +178,7 @@ class ChallengeSummarizer
             $answer->question_id = $question->id;
             $answer->data = $this->answers[$question->id];
             $answer->correct = (int)$correct[$question->id];
+            $answer->hint = (int)$this->hints[$question->id];
             $answer->save();
         }
 
@@ -207,18 +216,60 @@ class ChallengeSummarizer
     }
 
     /**
+     * @return \bool[]
+     */
+    public function getHints()
+    {
+        return $this->hints;
+    }
+
+    /**
+     * Get question result points
+     * @return float[]
+     */
+    public function getPoints() {
+        $correct = $this->getCorrectness();
+
+        $result = [];
+        foreach ($this->getQuestions() as $question) {
+            if ( $correct[$question->id] ) {
+                $points = (int)$question->cost;
+
+                // if hint used, decrease points amount
+                if ( $this->hints[$question->id] ) {
+                    $points /= 2;
+                }
+
+                $result[$question->id] = $points;
+            } else {
+                $result[$question->id] = 0;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Get challenge maximum points
+     * @return float
+     */
+    public function getMaxPoints() {
+        $max = 0;
+
+        foreach ($this->getQuestions() as $question) {
+            $max += $question->cost;
+        }
+
+        return $max;
+    }
+
+    /**
      * Get percent of correct answers
      * @return float
      */
     public function getCorrectPercent()
     {
-        $correct = $this->getCorrectness();
-
-        $total = $max = 0;
-        foreach ($this->getQuestions() as $question) {
-            $max += $question->cost;
-            $total += $correct[$question->id] ? $question->cost : 0;
-        }
+        $max = $this->getMaxPoints();
+        $total = array_sum( $this->getPoints() );
 
         return $max > 0 ? round($total / $max * 100) : 0;
     }

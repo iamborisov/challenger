@@ -55,6 +55,7 @@ class ChallengeSession
     {
         if ($this->canStart()) {
             $this->clearAnswers();
+            $this->clearHints();
             $this->openQueue();
             $this->setCurrentQuestionNumber(0);
             $this->setStartTime();
@@ -90,6 +91,16 @@ class ChallengeSession
         if ($this->isFinished()) {
             $this->finish();
         }
+    }
+
+    /**
+     * Get current question hint
+     * @return string
+     */
+    public function hint()
+    {
+        $this->useHint();
+        return $this->getCurrentQuestion()->hint;
     }
 
     /**
@@ -148,6 +159,54 @@ class ChallengeSession
     }
 
 //----------------------------------------------------------------------------------------------------------------------
+// Hints
+//----------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Remember hint usage for current question
+     */
+    protected function useHint()
+    {
+        $queue = $this->getQueue();
+        $question = $queue[$this->getCurrentQuestionNumber()];
+
+        $hints = $this->getHints();
+        $hints[$question] = true;
+
+        \Yii::$app->session->set($this->getSessionKey('hints'), $hints);
+    }
+
+    /**
+     * Reset hints array in session
+     */
+    protected function clearHints()
+    {
+        \Yii::$app->session->remove($this->getSessionKey('hints'));
+    }
+
+    /**
+     * Get hints usage
+     * @return array
+     */
+    public function getHints()
+    {
+        return \Yii::$app->session->get($this->getSessionKey('hints'), []);
+    }
+
+    /**
+     * Get is hint used for current question
+     * @return bool
+     */
+    public function isHintUsed() {
+        $queue = $this->getQueue();
+        $question = $queue[$this->getCurrentQuestionNumber()];
+
+        $hints = $this->getHints();
+
+        return isset($hints[$question]) && $hints[$question];
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
 // Answers
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -161,7 +220,7 @@ class ChallengeSession
         $queue = $this->getQueue();
         $question = $queue[$this->getCurrentQuestionNumber()];
 
-        $answers[ $question ] = $answer;
+        $answers[$question] = $answer;
 
         \Yii::$app->session->set($this->getSessionKey('answers'), $answers);
     }
@@ -223,8 +282,8 @@ class ChallengeSession
         switch ($this->challenge->getMode()) {
             case Challenge::MODE_STATIC:
             case Challenge::MODE_DYNAMIC:
-                foreach ($this->challenge->getQuestions()->all() as $question) {
-                    $queue[] = $question->id;
+                foreach ($this->challenge->getChallengeHasQuestions()->all() as $item) {
+                    $queue[] = $item->question_id;
                 }
                 break;
 

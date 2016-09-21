@@ -10,6 +10,7 @@
 /**
  * @var \app\models\Question $question
  * @var \app\models\Challenge $challenge
+ * @var \app\helpers\ChallengeSession $session
  */
 ?>
 <h1><?= $challenge->name ?></h1>
@@ -42,7 +43,7 @@
             ]) ?>
 
             <div class="hint-content alert alert-info" role="alert" style="display: none;">
-                <strong>Подсказка:</strong> <?= $question->hint ?>
+                <strong>Подсказка:</strong> <span></span>
             </div>
 
         <div class="row">
@@ -60,11 +61,24 @@
 </div>
 
 <script>
-    $(function(){
-        $('.hint-button').click( function() {
+    $(function() {
+
+        function showHint(hint) {
+            $('.hint-content span').text(hint);
             $('.hint-content').show();
-            $(this).addClass('disabled');
+            $('.hint-button').hide();
+        }
+
+        $('.hint-button').click( function() {
+            $.get('<?= \yii\helpers\Url::to(['challenge/hint', 'id' => $challenge->id]) ?>', function(data) {
+                showHint(data);
+            });
+
             return false;
         } );
+
+        <?php if( $session->isHintUsed() ): ?>
+        showHint(<?= \yii\helpers\Json::encode( $session->hint() ) ?>);
+        <?php endif;?>
     });
 </script>

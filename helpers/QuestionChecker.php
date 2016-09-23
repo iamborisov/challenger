@@ -27,7 +27,7 @@ class QuestionChecker
                 return false;
 
             case 'dictation':
-                return false;
+                return self::checkDictation($answer);
 
             case 'assoc':
             case 'assoc_table':
@@ -83,6 +83,21 @@ class QuestionChecker
 
         foreach ($answer as $pair) {
             if ($pair[0] != $pair[1]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    protected static function checkDictation($answer)
+    {
+        if (!is_array($answer) || !count($answer)) {
+            return false;
+        }
+
+        foreach ( $answer as $item ) {
+            if ( $item != 0 ) {
                 return false;
             }
         }

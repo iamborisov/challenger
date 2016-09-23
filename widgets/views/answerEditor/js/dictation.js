@@ -37,6 +37,8 @@
         show: function (data) {
             var content = this.renderHtml(this.parseData(data));
             $('.content', this.element).html('').append(content);
+
+            this.changeData();
         },
 
         hide: function () {
@@ -64,11 +66,17 @@
         //--------------------------------------------------------------------------------------------------------------
 
         parseData: function (raw) {
-            return {};
+            return {
+                items: raw && 'items' in raw ? raw.items : []
+            };
         },
 
         changeData: function () {
-            var result = {};
+            var result = [];
+
+            $('.content', this.element).find('select').each(function () {
+                result.push(parseInt($(this).val()));
+            });
 
             this.onChange.apply(this.owner, [result]);
         },
@@ -78,7 +86,28 @@
 
             var result = self.getTemplate('content');
 
-            result.on('change', 'textarea', function () {
+            for (var item in data.items) {
+                if ($.isArray(data.items[item])) {
+                    var ids = Object.keys(data.items[item]);
+                    for (var i = ids.length - 1; i > 0; i--) {
+                        var j = Math.floor(Math.random() * (i + 1));
+                        var temp = ids[i];
+                        ids[i] = ids[j];
+                        ids[j] = temp;
+                    }
+
+                    var select = "<select>";
+                    for ( var option in ids ) {
+                        select += "<option value='"+ids[option]+"'>" + data.items[item][ids[option]] + "</option>";
+                    }
+                    select += "</select>";
+                    result.append(select);
+                } else {
+                    result.append(data.items[item]);
+                }
+            }
+
+            result.on('change', 'select', function () {
                 self.changeData();
             });
 

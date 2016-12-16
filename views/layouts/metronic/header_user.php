@@ -1,5 +1,6 @@
 <?php
 use yii\widgets\Menu;
+use yii\helpers\Html;
 $user = Yii::$app->user->identity;
 ?>
 
@@ -348,7 +349,16 @@ $user = Yii::$app->user->identity;
             $menuItems[] = ['label' => 'Админка', 'url' => ['/admin/index']];
         }
 
-        $menuItems[] = ['label' => 'Выйти', 'url' => ['/user/logout']];
+        $logout = '<li>' .
+            Html::beginForm(['/user/logout'], 'post', ['class' => 'navbar-form']) .
+            Html::submitButton(
+                '{label}',
+                ['class' => 'btn btn-warning']
+            ) .
+            Html::endForm() .
+            '</li>';
+
+        $menuItems[] = ['label' => 'Выйти', 'url' => ['/user/logout'], 'template' => $logout];
 
         echo Menu::widget([
             'options' => [

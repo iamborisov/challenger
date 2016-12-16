@@ -14,7 +14,7 @@ use yii\web\Controller;
  */
 class SiteController extends Controller
 {
-    public $layout = 'metronic_sidebar';
+    public $layout = 'metronic';
 
     /**
      * @inheritdoc

@@ -72,7 +72,17 @@ $config = [
     'modules' => [
         'user' => [
             'class' => 'dektrium\user\Module',
-            'adminPermission' => 'admin'
+            'adminPermission' => 'admin',
+            'controllerMap' => [
+                'settings' => [
+                    'class' => 'dektrium\user\controllers\SettingsController',
+                    'layout' => '@app/views/layouts/metronic_sidebar',
+                ],
+                'security' => [
+                    'class' => 'dektrium\user\controllers\SecurityController',
+                    'layout' => '@app/views/layouts/metronic',
+                ],
+            ]
         ],
         'rbac' => [
             'class' => 'dektrium\rbac\Module',

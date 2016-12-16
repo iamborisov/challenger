@@ -1,6 +1,6 @@
 <?php $id = uniqid('ae_text_short') ?>
 
-<div id="<?= $id ?>" class="select-one answer-editor-extension">
+<div id="<?= $id ?>" class="text-short answer-editor-extension">
     <div class="content"></div>
     <div class="template content-template">
         <ul class="items"></ul>

@@ -15,7 +15,7 @@ use yii\web\NotFoundHttpException;
  */
 class SubscriptionController extends Controller
 {
-    public $layout = 'home';
+    public $layout = 'metronic_sidebar';
 
     /**
      * @inheritdoc

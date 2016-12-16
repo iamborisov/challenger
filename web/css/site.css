@@ -89,3 +89,10 @@ a.desc:after {
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
+
+.panel-heading .progress {
+    margin-bottom: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    margin: 10px 0 2px 0;
+}

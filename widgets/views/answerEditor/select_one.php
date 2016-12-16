@@ -6,8 +6,10 @@
         <div class="items"></div>
     </div>
     <div class="template item-template item row">
-        <div class="col-xs-2 col-md-1"><input type="radio" name="<?= $id ?>" class="pull-right"></div>
-        <div class="col-xs-10 col-md-11"><span class="text"></span></div>
+        <label>
+            <input type="radio" name="<?= $id ?>" class="pull-right">
+            <span class="text"></span>
+        </label>
     </div>
 </div>
 

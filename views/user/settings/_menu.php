@@ -17,7 +17,9 @@ $user = Yii::$app->user->identity;
 $networksVisible = count(Yii::$app->authClientCollection->clients) > 0;
 
 ?>
-
+<?php
+// Old menu
+/*
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">
@@ -44,3 +46,23 @@ $networksVisible = count(Yii::$app->authClientCollection->clients) > 0;
         ]) ?>
     </div>
 </div>
+ */ ?>
+
+<?php /* Metronic menu */ ?>
+<?= Menu::widget([
+    'options' => [
+        'class' => 'page-sidebar-menu',
+        'data-keep-expanded' => 'false',
+        'data-auto-scroll' => 'true',
+        'data-slide-speed' => '200',
+    ],
+    'items' => [
+        ['label' => Yii::t('home', 'Home'), 'url' => ['/home/index']],
+        ['label' => Yii::t('home', 'Subscriptions'), 'url' => ['/subscription/index']],
+        ['label' => Yii::t('home', 'Courses'), 'url' => ['/subscription/all']],
+        ['label' => Yii::t('user', 'Profile'), 'url' => ['/user/settings/profile']],
+        ['label' => Yii::t('user', 'Account'), 'url' => ['/user/settings/account']],
+        ['label' => Yii::t('user', 'Networks'), 'url' => ['/user/settings/networks'], 'visible' => $networksVisible],
+    ],
+    'linkTemplate' => '<a href="{url}"><span class="title">{label}</span></a>',
+]) ?>

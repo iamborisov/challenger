@@ -9,6 +9,7 @@ use Yii;
 use yii\helpers\Json;
 use yii\web\AssetManager;
 use yii\base\Widget;
+use yii\web\View;
 
 /**
  * Answer Editor Widget
@@ -41,17 +42,20 @@ class AnswerEditor extends \yii\base\Widget
 
         // register assets
         $this->getView()->registerJsFile(
-            $this->publishAsset('js/jquery.ui.touch.js')
+            $this->publishAsset('js/jquery.ui.touch.js'),
+            ['position' => View::POS_BEGIN]
         );
         $this->getView()->registerJsFile(
-            $this->publishAsset('js/answer-editor.js')
+            $this->publishAsset('js/answer-editor.js'),
+            ['position' => View::POS_BEGIN]
         );
         $this->getView()->registerCssFile(
             $this->publishAsset('css/answer-editor.css')
         );
         foreach ($types as $id => $sysname) {
             $this->getView()->registerJsFile(
-                $this->publishAsset('js/' . $sysname . '.js')
+                $this->publishAsset('js/' . $sysname . '.js'),
+                ['position' => View::POS_BEGIN]
             );
             $this->getView()->registerCssFile(
                 $this->publishAsset('css/' . $sysname . '.css')

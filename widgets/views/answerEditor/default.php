@@ -6,7 +6,7 @@ $id = uniqid('ae');
 
 ?>
 
-<div id="<?= $id ?>" class="answer-editor well">
+<div id="<?= $id ?>" class="answer-editor">
     <?php foreach ($types as $sysname): ?>
         <?= $this->render($sysname) ?>
     <?php endforeach; ?>

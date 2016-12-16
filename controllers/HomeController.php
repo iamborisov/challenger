@@ -14,7 +14,7 @@ use yii\web\Controller;
  */
 class HomeController extends Controller
 {
-    public $layout = 'home';
+    public $layout = 'metronic_sidebar';
 
     /**
      * @inheritdoc

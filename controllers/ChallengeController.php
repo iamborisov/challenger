@@ -18,6 +18,8 @@ use yii\web\NotFoundHttpException;
  */
 class ChallengeController extends Controller
 {
+    public $layout = 'metronic_sidebar';
+
     /**
      * @inheritdoc
      */

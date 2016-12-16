@@ -13,24 +13,25 @@
  * @var \app\helpers\ChallengeSession $session
  */
 ?>
-<h1><?= $challenge->name ?></h1>
+
 <div class="panel panel-default">
     <div class="panel-heading">
-        Задание <?= $currentQuestion + 1 ?> из <?= $totalQuestions ?>
-        <div class="pull-right" style="width: 30%;">
-            <div class="progress">
-                <?php if( $challenge->settings->immediate_result ): ?>
-                    <?php foreach( \app\helpers\ChallengeSummarizer::fromSession( $session )->getCorrectness() as $correctness ): ?>
-                        <div class="progress-bar progress-bar-<?= $correctness ? 'success' : 'danger' ?>" style="width: <?= floor( 100 / $totalQuestions ) ?>%"></div>
-                    <?php endforeach;?>
-                <?php else: ?>
-                    <div class="progress-bar progress-bar-info" style="width: <?= floor( $currentQuestion / $totalQuestions * 100) ?>%"></div>
-                <?php endif;?>
-            </div>
+        <?= $challenge->name ?>
+        <div class="pull-right text-right" style="width: 30%;">
+            Задание <?= $currentQuestion + 1 ?> из <?= $totalQuestions ?>
+        </div>
+        <div class="progress">
+            <?php if( $challenge->settings->immediate_result ): ?>
+                <?php foreach( \app\helpers\ChallengeSummarizer::fromSession( $session )->getCorrectness() as $correctness ): ?>
+                    <div class="progress-bar progress-bar-<?= $correctness ? 'success' : 'danger' ?>" style="width: <?= floor( 100 / $totalQuestions ) ?>%"></div>
+                <?php endforeach;?>
+            <?php else: ?>
+                <div class="progress-bar progress-bar-info" style="width: <?= floor( $currentQuestion / $totalQuestions * 100) ?>%"></div>
+            <?php endif;?>
         </div>
     </div>
     <div class="panel-body">
-        <?= $question->text ?>
+        <?= nl2br( $question->text ) ?>
 
         <?php $form = ActiveForm::begin([
             'action' => ['challenge/answer', 'id' => $challenge->id],
@@ -52,6 +53,8 @@
             </div>
             <div class="col-xs-6 col-md-6 text-right">
                 <a href="#" class="btn btn-primary hint-button">Подсказать</a>
+                <a href="#" class="btn btn-warning hint-button">Пропустить</a>
+                <a href="#" class="btn btn-danger hint-button">Завершить</a>
             </div>
         </div>
 

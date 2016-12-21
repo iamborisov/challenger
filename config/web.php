@@ -21,13 +21,6 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
-            'useFileTransport' => true,
-        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -37,6 +30,7 @@ $config = [
                 ],
             ],
         ],
+        'mailer' => require(__DIR__ . '/mailer.php'),
         'db' => require(__DIR__ . '/db.php'),
 
         'urlManager' => [
@@ -81,6 +75,17 @@ $config = [
                 'security' => [
                     'class' => 'dektrium\user\controllers\SecurityController',
                     'layout' => '@app/views/layouts/metronic',
+                ],
+                'registration' => [
+                    'class' => \dektrium\user\controllers\RegistrationController::className(),
+                    'on ' . \dektrium\user\controllers\RegistrationController::EVENT_AFTER_REGISTER => function ($e) {
+                        Yii::$app->response->redirect(array('/user/security/login'))->send();
+                        Yii::$app->end();
+                    },
+                    'on ' . \dektrium\user\controllers\RegistrationController::EVENT_AFTER_CONFIRM => function ($e) {
+                        Yii::$app->response->redirect(array('/site/index'))->send();
+                        Yii::$app->end();
+                    }
                 ],
             ]
         ],

@@ -11,6 +11,7 @@ use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
+use kartik\markdown\Markdown;
 
 /**
  * Class ChallengeController
@@ -174,7 +175,7 @@ class ChallengeController extends Controller
         $session = new ChallengeSession($challenge, Yii::$app->user->id);
 
         //Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        return $session->hint();
+        return nl2br( Markdown::convert( $session->hint() ) );
     }
 
     /**

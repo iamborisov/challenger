@@ -92,6 +92,9 @@ $config = [
         'rbac' => [
             'class' => 'dektrium\rbac\Module',
             'adminPermission' => 'admin'
+        ],
+        'markdown' => [
+            'class' => 'kartik\markdown\Module',
         ]
     ],
 ];

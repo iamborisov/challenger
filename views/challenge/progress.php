@@ -1,6 +1,7 @@
 <?php
     use yii\widgets\ActiveForm;
     use app\widgets\AnswerEditor;
+    use kartik\markdown\Markdown;
 
     $currentQuestion = $session->getCurrentQuestionNumber();
     $totalQuestions = $challenge->getQuestionsCount();
@@ -31,7 +32,7 @@
         </div>
     </div>
     <div class="panel-body">
-        <?= nl2br( $question->text ) ?>
+        <?= nl2br( Markdown::convert( $question->text ) ) ?>
 
         <?php $form = ActiveForm::begin([
             'action' => ['challenge/answer', 'id' => $challenge->id],
@@ -44,7 +45,7 @@
             ]) ?>
 
             <div class="hint-content alert alert-info" role="alert" style="display: none;">
-                <strong>Подсказка:</strong> <span></span>
+                <strong>Подсказка:</strong><br /><span></span>
             </div>
 
         <div class="row">
@@ -53,8 +54,8 @@
             </div>
             <div class="col-xs-6 col-md-6 text-right">
                 <a href="#" class="btn btn-primary hint-button">Подсказать</a>
-                <a href="#" class="btn btn-warning hint-button">Пропустить</a>
-                <a href="#" class="btn btn-danger hint-button">Завершить</a>
+                <a href="#" class="btn btn-warning ">Пропустить</a>
+                <a href="#" class="btn btn-danger">Завершить</a>
             </div>
         </div>
 
@@ -67,7 +68,7 @@
     $(function() {
 
         function showHint(hint) {
-            $('.hint-content span').text(hint);
+            $('.hint-content span').html(hint);
             $('.hint-content').show();
             $('.hint-button').hide();
         }
@@ -81,7 +82,7 @@
         } );
 
         <?php if( $session->isHintUsed() ): ?>
-        showHint(<?= \yii\helpers\Json::encode( $session->hint() ) ?>);
+        showHint(<?= \yii\helpers\Json::encode( nl2br( Markdown::convert( $session->hint() ) ) ) ?>);
         <?php endif;?>
     });
 </script>

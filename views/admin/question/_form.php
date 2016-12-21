@@ -8,6 +8,7 @@ use app\models\QuestionType;
 use app\models\Course;
 use app\models\Subject;
 use app\models\ChallengeType;
+use kartik\markdown\MarkdownEditor;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Question */
@@ -36,10 +37,6 @@ use app\models\ChallengeType;
 
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active fade in" id="question">
-            <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
-
-            <?= $form->field($model, 'hint')->textarea(['rows' => 2]) ?>
-
             <?= $form->field($model, 'question_type_id')->widget(Select2::className(), [
                 'data' => QuestionType::getList(),
                 'options' => [
@@ -48,9 +45,28 @@ use app\models\ChallengeType;
                 ],
             ]) ?>
 
+            <?= $form->field($model, 'text', ['template' => '{label}']) ?>
+            <?= MarkdownEditor::widget([
+                'model' => $model,
+                'attribute' => 'text',
+            ]) ?>
+            <br />
+
             <?= $form->field($model, 'data')->widget(QuestionEditor::className()) ?>
 
-            <?= $form->field($model, 'comment')->textarea(['rows' => 4]) ?>
+            <?= $form->field($model, 'comment', ['template' => '{label}']) ?>
+            <?= MarkdownEditor::widget([
+                'model' => $model,
+                'attribute' => 'comment',
+            ]) ?>
+            <br />
+
+            <?= $form->field($model, 'hint', ['template' => '{label}']) ?>
+            <?= MarkdownEditor::widget([
+                'model' => $model,
+                'attribute' => 'hint',
+            ]) ?>
+            <br />
         </div>
         <div role="tabpanel" class="tab-pane fade" id="settings">
             <?= $form->field($model, 'cost')->textInput() ?>

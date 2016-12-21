@@ -4,7 +4,7 @@
     <div class="content"></div>
     <div class="template content-template">
         <ul class="items"></ul>
-        <input type="text" class="form-control">
+        <input type="text" class="form-control" placeholder="Ответ">
     </div>
     <div class="template item-template item row">
         <li class="col-xs-12 col-md-12">

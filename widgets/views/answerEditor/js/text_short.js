@@ -37,6 +37,7 @@
         show: function (data) {
             var content = this.renderHtml(this.parseData(data));
             $('.content', this.element).html('').append(content);
+            $('.content input', this.element).focus();
         },
 
         hide: function () {

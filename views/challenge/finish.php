@@ -19,7 +19,7 @@
         <div class="panel-body">
             <p class="lead"><?= $challenge->description ?></p>
 
-            <p>Оценка: <?= $summary->getMark() ?></p>
+            <p>Оценка: <?= $summary->getMark() ? $summary->getMark() : 'не доступно' ?></p>
             <p>Время: <?= round($summary->getTime() / 60) ?> мин.</p>
 
             <p><a class="btn btn-lg btn-success" href="<?= \yii\helpers\Url::to(['start', 'id' => $challenge->id, 'confirm' => true]) ?>">Повторить тестирование</a></p>

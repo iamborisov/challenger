@@ -97,13 +97,19 @@ class ChallengeController extends Controller
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionFinish($id = 0)
+    public function actionFinish($id = 0, $confirm = false)
     {
         $challenge = $this->getChallenge($id);
         $session = new ChallengeSession($challenge, Yii::$app->user->id);
 
         if (!$session->isFinished()) {
-            return $this->redirect(Url::to(['challenge/progress', 'id' => $challenge->id]));
+            if ($confirm) {
+                $session->finish();
+            } else {
+                return $this->render('finish_confirm', [
+                    'challenge' => $challenge
+                ]);
+            }
         }
 
         if (count($session->getAnswers())) {

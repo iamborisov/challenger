@@ -55,7 +55,7 @@
             <div class="col-xs-6 col-md-6 text-right">
                 <a href="#" class="btn btn-primary hint-button">Подсказать</a>
                 <a href="#" class="btn btn-warning ">Пропустить</a>
-                <a href="#" class="btn btn-danger">Завершить</a>
+                <a href="<?= \yii\helpers\Url::toRoute(['challenge/finish', 'id' => $challenge->id]) ?>" class="btn btn-danger">Завершить</a>
             </div>
         </div>
 

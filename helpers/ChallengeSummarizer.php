@@ -280,6 +280,10 @@ class ChallengeSummarizer
      */
     public function getMark()
     {
+        if ( $this->challenge->getQuestionsCount() > count($this->getQuestions()) ) {
+            return false;
+        }
+
         $percent = $this->getCorrectPercent();
 
         foreach ($this->marks as $range) {

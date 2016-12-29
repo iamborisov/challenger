@@ -96,3 +96,7 @@ a.desc:after {
     border: 1px solid #ddd;
     margin: 10px 0 2px 0;
 }
+
+.question-buttons a {
+    margin-bottom: 5px;
+}

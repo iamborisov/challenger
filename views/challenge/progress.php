@@ -59,7 +59,7 @@
                 <strong>Подсказка:</strong><br /><span></span>
             </div>
 
-        <div class="row">
+        <div class="row question-buttons">
             <div class="col-xs-6 col-md-6 text-left">
                 <input type="submit" class="btn btn-success" value="Ответить">
             </div>

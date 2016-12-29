@@ -30,7 +30,7 @@
                 <?php foreach( $summary->getCorrectness() as $id => $correctness ): ?>
                     <div
                         class="progress-bar progress-bar-<?= $correctness ? 'success' : 'danger' ?>"
-                        style="width: <?= floor( 100 / $totalQuestions ) ?>%; cursor: help;"
+                        style="width: <?= floor( 100 / $totalQuestions ) ?>%"
                         data-toggle="tooltip"
                         data-placement="bottom"
                         data-html="true"

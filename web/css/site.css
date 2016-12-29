@@ -97,6 +97,18 @@ a.desc:after {
     margin: 10px 0 2px 0;
 }
 
+.panel-heading .progress-bar-success {
+    cursor: help;
+    border-left: 1px solid #06766A;
+    border-right: 1px solid #06766A;
+}
+
+.panel-heading .progress-bar-danger {
+    cursor: help;
+    border-left: 1px solid #c9433f;
+    border-right: 1px solid #c9433f;
+}
+
 .question-buttons a {
     margin-bottom: 5px;
 }

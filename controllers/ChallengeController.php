@@ -185,6 +185,20 @@ class ChallengeController extends Controller
     }
 
     /**
+     * Skip current question
+     * @param int $id
+     */
+    public function actionSkip($id = 0)
+    {
+        $challenge = $this->getChallenge($id);
+        $session = new ChallengeSession($challenge, Yii::$app->user->id);
+
+        $session->skip();
+
+        return $this->redirect(Url::to(['challenge/progress', 'id' => $challenge->id]));
+    }
+
+    /**
      * Get Challenge by id
      * @param $id
      * @return Challenge

@@ -104,6 +104,18 @@ class ChallengeSession
     }
 
     /**
+     * Move current question to the end of queue
+     */
+    public function skip()
+    {
+        $queue = $this->getQueue();
+
+        $queue[] = reset(array_splice($queue, $this->getCurrentQuestionNumber(), 1));
+
+        $this->setQueue($queue);
+    }
+
+    /**
      * Is last question reached?
      * @return bool
      */
@@ -251,7 +263,7 @@ class ChallengeSession
      */
     protected function openQueue()
     {
-        \Yii::$app->session->set($this->getSessionKey('queue'), $this->generateQueue());
+        $this->setQueue( $this->generateQueue() );
     }
 
     /**
@@ -269,6 +281,15 @@ class ChallengeSession
     protected function getQueue()
     {
         return \Yii::$app->session->get($this->getSessionKey('queue'));
+    }
+
+    /**
+     * Set questions ids for current challenge
+     * @param $queue
+     */
+    protected function setQueue($queue)
+    {
+        return \Yii::$app->session->set($this->getSessionKey('queue'), $queue);
     }
 
     /**

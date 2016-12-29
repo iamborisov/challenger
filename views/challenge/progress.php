@@ -54,7 +54,9 @@
             </div>
             <div class="col-xs-6 col-md-6 text-right">
                 <a href="#" class="btn btn-primary hint-button">Подсказать</a>
-                <a href="#" class="btn btn-warning ">Пропустить</a>
+                <?php if( $session->getCurrentQuestionNumber() < $challenge->getQuestionsCount() - 1 ): ?>
+                    <a href="<?= \yii\helpers\Url::toRoute(['challenge/skip', 'id' => $challenge->id]) ?>" class="btn btn-warning ">Пропустить</a>
+                <?php endif; ?>
                 <a href="<?= \yii\helpers\Url::toRoute(['challenge/finish', 'id' => $challenge->id]) ?>" class="btn btn-danger">Завершить</a>
             </div>
         </div>

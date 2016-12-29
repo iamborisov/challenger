@@ -232,8 +232,6 @@ class ChallengeSummarizer
      * @return float[]
      */
     public function getPoints() {
-        $correct = $this->getCorrectness();
-
         $result = [];
         foreach ($this->getQuestions() as $question) {
             $points = (int)$question->getPoints($this->answers[$question->id]);

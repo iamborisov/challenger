@@ -216,6 +216,20 @@ class ChallengeSummarizer
     }
 
     /**
+     * @return \string[]
+     */
+    public function getComments()
+    {
+        $comments = [];
+
+        foreach ($this->getQuestions() as $question) {
+            $comments[$question->id] = $question->getComment(true);
+        }
+
+        return $comments;
+    }
+
+    /**
      * @return \bool[]
      */
     public function getHints()

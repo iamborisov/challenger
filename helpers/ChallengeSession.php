@@ -100,7 +100,7 @@ class ChallengeSession
     public function hint()
     {
         $this->useHint();
-        return $this->getCurrentQuestion()->hint;
+        return $this->getCurrentQuestion()->getHint( true );
     }
 
     /**

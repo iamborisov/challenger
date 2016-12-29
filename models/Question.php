@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\helpers\QuestionChecker;
+use kartik\markdown\Markdown;
 use Yii;
 use yii\helpers\Json;
 
@@ -106,6 +107,30 @@ class Question extends \app\models\ar\Question
         }
 
         return false;
+    }
+
+    /**
+     * @param bool $html
+     * @return string
+     */
+    public function getComment($html = false) {
+        return $html ? nl2br(rtrim(Markdown::convert($this->comment), "\r\n")) : $this->comment;
+    }
+
+    /**
+     * @param bool $html
+     * @return string
+     */
+    public function getText($html = false) {
+        return $html ? nl2br(rtrim(Markdown::convert($this->text), "\r\n")) : $this->text;
+    }
+
+    /**
+     * @param bool $html
+     * @return string
+     */
+    public function getHint($html = false) {
+        return $html ? nl2br(rtrim(Markdown::convert($this->hint), "\r\n")) : $this->hint;
     }
 
 }

@@ -181,7 +181,7 @@ class ChallengeController extends Controller
         $session = new ChallengeSession($challenge, Yii::$app->user->id);
 
         //Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        return nl2br( Markdown::convert( $session->hint() ) );
+        return $session->hint();
     }
 
     /**

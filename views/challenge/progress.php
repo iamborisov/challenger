@@ -8,7 +8,10 @@
 
     $question = $session->getCurrentQuestion();
 
+    $summary = \app\helpers\ChallengeSummarizer::fromSession( $session );
+
 /**
+ * @var \app\helpers\ChallengeSummarizer $summary
  * @var \app\models\Question $question
  * @var \app\models\Challenge $challenge
  * @var \app\helpers\ChallengeSession $session
@@ -23,8 +26,16 @@
         </div>
         <div class="progress">
             <?php if( $challenge->settings->immediate_result ): ?>
-                <?php foreach( \app\helpers\ChallengeSummarizer::fromSession( $session )->getCorrectness() as $correctness ): ?>
-                    <div class="progress-bar progress-bar-<?= $correctness ? 'success' : 'danger' ?>" style="width: <?= floor( 100 / $totalQuestions ) ?>%"></div>
+                <?php $comments = $summary->getComments(); ?>
+                <?php foreach( $summary->getCorrectness() as $id => $correctness ): ?>
+                    <div
+                        class="progress-bar progress-bar-<?= $correctness ? 'success' : 'danger' ?>"
+                        style="width: <?= floor( 100 / $totalQuestions ) ?>%; cursor: help;"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        data-html="true"
+                        title="<?= htmlspecialchars( $comments[$id] ) ?>"
+                    ></div>
                 <?php endforeach;?>
             <?php else: ?>
                 <div class="progress-bar progress-bar-info" style="width: <?= floor( $currentQuestion / $totalQuestions * 100) ?>%"></div>
@@ -32,7 +43,7 @@
         </div>
     </div>
     <div class="panel-body">
-        <?= nl2br( Markdown::convert( $question->text ) ) ?>
+        <?= $question->getText() ?>
 
         <?php $form = ActiveForm::begin([
             'action' => ['challenge/answer', 'id' => $challenge->id],
@@ -84,7 +95,11 @@
         } );
 
         <?php if( $session->isHintUsed() ): ?>
-        showHint(<?= \yii\helpers\Json::encode( nl2br( Markdown::convert( $session->hint() ) ) ) ?>);
+        showHint(<?= \yii\helpers\Json::encode( $session->hint() ) ?>);
         <?php endif;?>
+
+        <?php if($challenge->settings->immediate_result ): ?>
+        $('.progress-bar[data-toggle="tooltip"]').tooltip();
+        <?php endif; ?>
     });
 </script>

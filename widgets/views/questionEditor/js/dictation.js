@@ -65,13 +65,15 @@
 
         parseData: function (raw) {
             return {
-                items: raw && 'items' in raw ? raw.items : []
+                items: raw && 'items' in raw ? raw.items : [],
+                comments: raw && 'comments' in raw ? raw.comments : []
             };
         },
 
         changeData: function () {
             var result = {
-                items: []
+                items: [],
+                comments: []
             };
 
             var nodes = $('.content .editor', this.element).get(0).childNodes;
@@ -88,7 +90,9 @@
                         node.find('.option').each(function () {
                             item.push($(this).find('.value').text());
                         });
+
                         result.items.push(item);
+                        result.comments.push(node.data('comment'));
                     }
 
                 }
@@ -104,11 +108,14 @@
             var editor = result.find('.editor');
 
             // load data
+            var editableItemId = 0;
             for (var i = 0; i < data.items.length; i++) {
                 if ($.isArray(data.items[i])) {
                     var item = self.getTemplate('item');
-                    self.buildItem( item, data.items[i][0], data.items[i].splice(1) );
+                    self.buildItem( item, data.items[i][0], data.items[i].splice(1), data.comments[editableItemId] );
                     editor.append( item );
+
+                    editableItemId++;
                 } else {
                     editor.append( data.items[i] );
                 }
@@ -272,7 +279,7 @@
          * @param value
          * @param options
          */
-        buildItem: function (item, value, options) {
+        buildItem: function (item, value, options, comment) {
             var self = this;
 
             // insert default option
@@ -314,12 +321,26 @@
                 return false;
             });
 
+            // bind add comment
+            item.find('.comment').attr('title', comment).click(function () {
+                var val = prompt('Добавить комментарий:', item.data('comment'));
+
+                if (val !== null) {
+                    item.data('comment', val).attr('title', val);
+                    self.changeData();
+                }
+
+                return false;
+            });
+
             // add options
             for (var i in options) {
                 var option = self.getTemplate('option');
                 option.find('.value').text(options[i]);
                 item.find('.dropdown-menu').append(option);
             }
+
+            item.data('comment', comment);
         }
 
     });

@@ -20,6 +20,7 @@
                 </ul>
             </div>
             <button type="button" class="btn btn-xs btn-success add">+</button>
+            <button type="button" class="btn btn-xs btn-primary comment">?</button>
         </div>
     </div>
     <li class="template option-template option">

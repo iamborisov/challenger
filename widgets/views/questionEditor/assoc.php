@@ -12,8 +12,9 @@
         </div>
     </div>
     <div class="template item-template item row">
-        <div class="col-xs-5 col-md-6"><input type="text" class="form-control"></div>
-        <div class="col-xs-5 col-md-5"><input type="text" class="form-control"></div>
+        <div class="col-xs-4 col-md-4"><input type="text" class="form-control"></div>
+        <div class="col-xs-3 col-md-4"><input type="text" class="form-control"></div>
+        <div class="col-xs-3 col-md-3"><input type="text" class="form-control" placeholder="Комментарий"></div>
         <div class="col-xs-2 col-md-1"><a class="btn btn-danger btn-xs remove pull-left">Удалить</a></div>
     </div>
 </div>

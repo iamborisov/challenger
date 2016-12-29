@@ -1,7 +1,6 @@
 <?php
     use yii\widgets\ActiveForm;
     use app\widgets\AnswerEditor;
-    use kartik\markdown\Markdown;
 
     $currentQuestion = $session->getCurrentQuestionNumber();
     $totalQuestions = $challenge->getQuestionsCount();
@@ -26,15 +25,25 @@
         </div>
         <div class="progress">
             <?php if( $challenge->settings->immediate_result ): ?>
-                <?php $comments = $summary->getComments(); ?>
-                <?php foreach( $summary->getCorrectness() as $id => $correctness ): ?>
+                <?php $correctness = $summary->getCorrectness() ?>
+                <?php foreach( $summary->getQuestions() as $i => $q ): ?>
+
+                    <?php $comment = ["<strong>Задание ".( $i+1 )." из $totalQuestions</strong>"] ?>
+                    <?php if( $correctness[$q->id] ):?>
+                        <?php $comment[] = 'Выполнено правильно' ?>
+                    <?php else: ?>
+                        <?php $comment[] = 'Выполнено с ошибками' ?>
+                        <?php $comment[] = $q->getComment(true) ?>
+                        <?php if(count($mistakes = $summary->getMistakes($q))) $comment[] = '<ul><li>'.implode( '<li>', $mistakes ).'</ul>' ?>
+                    <?php endif; ?>
+
                     <div
-                        class="progress-bar progress-bar-<?= $correctness ? 'success' : 'danger' ?>"
+                        class="progress-bar progress-bar-<?= $correctness[$q->id] ? 'success' : 'danger' ?>"
                         style="width: <?= floor( 100 / $totalQuestions ) ?>%"
                         data-toggle="tooltip"
                         data-placement="bottom"
                         data-html="true"
-                        title="<?= htmlspecialchars( $comments[$id] ) ?>"
+                        title="<?= htmlspecialchars( implode( '<p></p>', $comment ) ) ?>"
                     ></div>
                 <?php endforeach;?>
             <?php else: ?>

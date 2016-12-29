@@ -65,8 +65,8 @@ class QuestionChecker
      */
     protected static function checkTextShort($correct, $answer)
     {
-        $correct = mb_strtolower(trim($correct));
-        $answer = mb_strtolower(trim($answer));
+        $correct = str_replace('ё', 'е', mb_strtolower(trim($correct)));
+        $answer = str_replace('ё', 'е', mb_strtolower(trim($answer)));
         return strcasecmp($correct, $answer) == 0;
     }
 
@@ -81,27 +81,33 @@ class QuestionChecker
             return false;
         }
 
-        foreach ($answer as $pair) {
+        $mistakes = [];
+        foreach ($answer as $i => $pair) {
             if ($pair[0] != $pair[1]) {
-                return false;
+                $mistakes[] = $i;
             }
         }
 
-        return true;
+        return count($mistakes) ? $mistakes : true;
     }
 
+    /**
+     * @param $answer
+     * @return int
+     */
     protected static function checkDictation($answer)
     {
         if (!is_array($answer) || !count($answer)) {
             return false;
         }
 
-        foreach ( $answer as $item ) {
+        $mistakes = [];
+        foreach ( $answer as $i => $item ) {
             if ( $item != 0 ) {
-                return false;
+                $mistakes[] = $i;
             }
         }
 
-        return true;
+        return count($mistakes) ? $mistakes : true;
     }
 }

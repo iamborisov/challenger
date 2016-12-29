@@ -77,7 +77,49 @@ class Question extends \app\models\ar\Question
      */
     public function check($answer)
     {
-        return QuestionChecker::check($this, $answer);
+        $result = QuestionChecker::check($this, $answer);
+
+        return is_array($result) ? false : $result;
+    }
+
+    /**
+     * Get mistakes list
+     * @param $answer
+     * @return int[]
+     */
+    public function getMistakes($answer) {
+        $result = [];
+
+        $mistakes = QuestionChecker::check($this, $answer);
+        if ( is_array($mistakes) ) {
+            $data = $this->getData();
+            foreach ( $mistakes as $mistake ) {
+                if ( isset($data['comments'][$mistake]) ) {
+                    $result[] = $data['comments'][$mistake];
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    public function getMaxMistakes()
+    {
+        switch ($this->getQuestionType()->one()->sysname) {
+            case 'dictation':
+                $data = $this->getData();
+                $options = 0;
+                foreach ($data['items'] as $item) $options += is_array($item);
+                return $options;
+
+            case 'assoc':
+            case 'assoc_table':
+                $data = $this->getData();
+                return count($data['options']);
+
+            default:
+                return 1;
+        }
     }
 
     /**
@@ -131,6 +173,27 @@ class Question extends \app\models\ar\Question
      */
     public function getHint($html = false) {
         return $html ? nl2br(rtrim(Markdown::convert($this->hint), "\r\n")) : $this->hint;
+    }
+
+    /**
+     * Get question max points
+     * @return int
+     */
+    public function getCost() {
+        return $this->cost ? $this->cost : $this->getMaxMistakes();
+    }
+
+    /**
+     * @param $answer
+     */
+    public function getPoints($answer) {
+        $mistakes = QuestionChecker::check($this, $answer);
+        $mistakes = is_array($mistakes) ? count($mistakes) : (int)(!$mistakes);
+
+        $maxMistakes = $this->getMaxMistakes();
+        $mistakeCost = $maxMistakes ? $this->getCost() / $maxMistakes : 0;
+
+        return $this->getCost() - ( $mistakes * $mistakeCost );
     }
 
 }

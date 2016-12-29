@@ -66,19 +66,24 @@
         parseData: function (raw) {
             return {
                 options: raw && 'options' in raw ? raw.options : [],
-                associations: raw && 'associations' in raw ? raw.associations : []
+                associations: raw && 'associations' in raw ? raw.associations : [],
+                comments: raw && 'comments' in raw ? raw.comments : []
             };
         },
 
         changeData: function () {
             var result = {
                 options: [],
-                associations: []
+                associations: [],
+                comments: []
             };
 
             $('.content', this.element).find('.item').each(function () {
-                result.options.push($(this).find('input[type=text]:first').val());
-                result.associations.push($(this).find('input[type=text]:last').val());
+                var inputs = $(this).find('input[type=text]');
+
+                result.options.push($(inputs[0]).val());
+                result.associations.push($(inputs[1]).val());
+                result.comments.push($(inputs[2]).val());
             });
 
             this.onChange.apply(this.owner, [result]);
@@ -91,9 +96,11 @@
 
             for (var i in data.options) {
                 var item = self.getTemplate('item');
+                var inputs = item.find('input[type=text]');
 
-                item.find('input[type=text]:first').val(data.options[i]);
-                item.find('input[type=text]:last').val(data.associations[i]);
+                $(inputs[0]).val(data.options[i]);
+                $(inputs[1]).val(data.associations[i]);
+                $(inputs[2]).val(data.comments[i]);
 
                 result.find('.items').append(item);
             }

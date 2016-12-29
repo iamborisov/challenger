@@ -112,3 +112,8 @@ a.desc:after {
 .question-buttons a {
     margin-bottom: 5px;
 }
+
+.tooltip ul {
+    padding-left: 20px;
+    text-align: left;
+}

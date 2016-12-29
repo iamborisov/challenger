@@ -97,12 +97,12 @@
 
             // shuffle options
             var ids = Object.keys(data.options);
-            for (var i = ids.length - 1; i > 0; i--) {
-                var j = Math.floor(Math.random() * (i + 1));
-                var temp = ids[i];
-                ids[i] = ids[j];
-                ids[j] = temp;
-            }
+            //for (var i = ids.length - 1; i > 0; i--) {
+            //    var j = Math.floor(Math.random() * (i + 1));
+            //    var temp = ids[i];
+            //    ids[i] = ids[j];
+            //    ids[j] = temp;
+            //}
 
             var char = "А".charCodeAt(0);
             for (var i in ids) {

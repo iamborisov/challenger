@@ -215,18 +215,8 @@ class ChallengeSummarizer
         return $this->correct;
     }
 
-    /**
-     * @return \string[]
-     */
-    public function getComments()
-    {
-        $comments = [];
-
-        foreach ($this->getQuestions() as $question) {
-            $comments[$question->id] = $question->getComment(true);
-        }
-
-        return $comments;
+    public function getMistakes(Question $question) {
+        return $question->getMistakes( $this->answers[$question->id] );
     }
 
     /**
@@ -246,18 +236,14 @@ class ChallengeSummarizer
 
         $result = [];
         foreach ($this->getQuestions() as $question) {
-            if ( $correct[$question->id] ) {
-                $points = (int)$question->cost;
+            $points = (int)$question->getPoints($this->answers[$question->id]);
 
-                // if hint used, decrease points amount
-                if ( $this->hints[$question->id] ) {
-                    $points /= 2;
-                }
-
-                $result[$question->id] = $points;
-            } else {
-                $result[$question->id] = 0;
+            // if hint used, decrease points amount
+            if ( $this->hints[$question->id] ) {
+                $points /= 2;
             }
+
+            $result[$question->id] = $points;
         }
         return $result;
     }
@@ -270,7 +256,7 @@ class ChallengeSummarizer
         $max = 0;
 
         foreach ($this->getQuestions() as $question) {
-            $max += $question->cost;
+            $max += (int)$question->getCost();
         }
 
         return $max;
